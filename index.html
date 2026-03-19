@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode AI | Live Builder</title>
+    <title>LuminaCode</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.css"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -24,18 +24,18 @@
         .logo-section { display: flex; align-items: center; gap: 12px; }
         .app-logo { width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--border); box-shadow: 0 0 15px var(--accent); }
 
+        .account-area { display: flex; align-items: center; gap: 10px; }
+        #user-info { display: none; align-items: center; gap: 10px; background: rgba(139, 92, 246, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid var(--accent); }
+        #u-img { width: 30px; height: 30px; border-radius: 50%; border: 1px solid white; }
+
         .main-layout { display: flex; flex: 1; overflow: hidden; }
-        
-        /* Sidebar Scrollable */
         .sidebar { width: 380px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; gap: 15px; overflow-y: auto; }
         
-        #chat-window { min-height: 150px; background: #070708; border: 1px solid var(--border); border-radius: 10px; padding: 15px; font-size: 0.9rem; color: #bbb; border-left: 3px solid var(--accent); white-space: pre-wrap; }
+        #chat-window { min-height: 150px; background: #070708; border: 1px solid var(--border); border-radius: 10px; padding: 15px; font-size: 0.9rem; color: #bbb; border-left: 3px solid var(--accent); }
         
-        .input-field { background: #1a1a1e; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; outline: none; }
+        .input-field, select { background: #1a1a1e; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; outline: none; }
         .btn { background: var(--accent); border: none; color: white; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn:hover { filter: brightness(1.2); }
 
-        /* Workspace */
         .workspace { flex: 1; display: flex; flex-direction: column; background: #000; overflow: hidden; }
         .tab-bar { background: #111; display: flex; border-bottom: 1px solid var(--border); }
         .tab { padding: 12px 20px; cursor: pointer; font-size: 0.8rem; color: #71717a; border-right: 1px solid var(--border); }
@@ -43,9 +43,7 @@
 
         .editor-container { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
         .CodeMirror { flex: 1; font-size: 14px; height: 100% !important; }
-        
-        #preview-wrap { height: 40%; background: white; border-top: 4px solid var(--border); }
-        iframe { width: 100%; height: 100%; border: none; }
+        iframe { height: 35%; background: white; border-top: 4px solid var(--border); }
     </style>
 </head>
 <body>
@@ -55,31 +53,37 @@
         <img src="logo.jpeg" alt="L" class="app-logo">
         <h2 style="margin:0; font-size: 1.2rem;">LuminaCode AI</h2>
     </div>
-    <div id="user-display" style="display:none; align-items:center; gap:10px;">
-        <span id="u-name" style="font-size:12px; font-weight:700;"></span>
-        <img id="u-img" style="width:30px; border-radius:50%; border:1px solid var(--accent);">
+    <div class="account-area">
+        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
+        <div class="g_id_signin" data-type="standard"></div>
+        <div id="user-info"><span id="u-name" style="font-size:12px; font-weight:bold; color:white;"></span><img id="u-img" referrerpolicy="no-referrer"></div>
     </div>
-    <div class="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
-    <div class="g_id_signin" data-type="standard"></div>
 </nav>
 
 <div class="main-layout">
     <aside class="sidebar">
-        <div id="chat-window"><b>LuminaCode AI:</b> Ready. DarkFox Co. made me to help.</div>
+        <div id="chat-window"><b>LuminaCode AI:</b> Hello! I'm ready to build your website. Describe what you need.</div>
         
-        <input type="password" id="api-key" class="input-field" placeholder="Paste API Key...">
-        <button class="btn" style="background:#27272a; font-size:11px;" onclick="syncModels()">Check Key & Models</button>
-        
-        <select id="model-select" class="input-field"></select>
+        <div>
+            <label style="font-size: 10px; color: #71717a;">API CONFIG</label>
+            <input type="password" id="api-key" class="input-field" placeholder="Enter Gemini Key...">
+            <button class="btn" style="background:#18181b; margin-top:5px; padding:8px; font-size:11px;" onclick="fetchAvailableModels()">
+                <i data-lucide="search"></i> SYNC MODELS (API CHECK)
+            </button>
+        </div>
 
-        <textarea id="ai-prompt" class="input-field" style="height: 100px; resize:none;" placeholder="What are we building?"></textarea>
+        <select id="model-select" class="input-field">
+            <option value="">No models loaded...</option>
+        </select>
+
+        <textarea id="ai-prompt" class="input-field" style="height: 100px; resize:none;" placeholder="Describe your web project..."></textarea>
         
         <button id="run-btn" class="btn" onclick="generateProject()">
             <i data-lucide="play"></i> EXECUTE BUILD
         </button>
         
-        <button class="btn" style="background:#18181b;" onclick="downloadZip()">
-            <i data-lucide="download"></i> DOWNLOAD AS ZIP
+        <button class="btn" style="background:#27272a;" onclick="downloadZip()">
+            <i data-lucide="download"></i> DOWNLOAD PROJECT (.ZIP)
         </button>
     </aside>
 
@@ -92,16 +96,14 @@
         <div class="editor-container">
             <textarea id="editor"></textarea>
         </div>
-        <div id="preview-wrap">
-            <iframe id="preview"></iframe>
-        </div>
+        <iframe id="preview"></iframe>
     </div>
 </div>
 
 <script>
     lucide.createIcons();
     let currentTab = 'html';
-    let files = { html: '', css: '', js: '' };
+    let files = { html: '', css: '/* CSS */', js: '// JS' };
     const cm = CodeMirror.fromTextArea(document.getElementById('editor'), {
         theme: "dracula", lineNumbers: true, mode: "htmlmixed", lineWrapping: true
     });
@@ -109,8 +111,8 @@
     function handleSignIn(response) {
         const data = JSON.parse(atob(response.credential.split('.')[1]));
         document.querySelector('.g_id_signin').style.display = 'none';
-        document.getElementById('user-display').style.display = 'flex';
-        document.getElementById('u-name').innerText = data.name;
+        document.getElementById('user-info').style.display = 'flex';
+        document.getElementById('u-name').innerText = data.given_name;
         document.getElementById('u-img').src = data.picture;
     }
 
@@ -123,26 +125,28 @@
         cm.setValue(files[tab]);
     }
 
-    async function syncModels() {
-        const key = document.getElementById('api-key').value;
+    async function fetchAvailableModels() {
+        const key = document.getElementById('api-key').value.trim();
+        if(!key) return alert("Please enter an API Key first.");
         try {
             const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-            const d = await r.json();
-            const sel = document.getElementById('model-select');
-            sel.innerHTML = '';
-            d.models.forEach(m => {
+            const data = await r.json();
+            const select = document.getElementById('model-select');
+            select.innerHTML = '';
+            data.models.forEach(m => {
                 if(m.supportedGenerationMethods.includes("generateContent")) {
-                    const o = document.createElement('option');
-                    o.value = m.name.split('/').pop();
-                    o.innerText = o.value;
-                    sel.appendChild(o);
+                    const opt = document.createElement('option');
+                    opt.value = m.name.split('/').pop();
+                    opt.innerText = opt.value;
+                    if(opt.value === 'gemini-1.5-flash') opt.selected = true;
+                    select.appendChild(opt);
                 }
             });
-            alert("Success: Models loaded.");
-        } catch(e) { alert("Check API Key."); }
+            alert("API Check Success: Models synced!");
+        } catch(e) { alert("Invalid API Key or Network Error."); }
     }
 
-    async function streamText(text) {
+    async function streamChat(text) {
         const chat = document.getElementById('chat-window');
         chat.innerHTML = "<b>LuminaCode AI:</b> ";
         for (let i = 0; i < text.length; i++) {
@@ -153,37 +157,42 @@
     }
 
     async function generateProject() {
-        const key = document.getElementById('api-key').value;
+        const key = document.getElementById('api-key').value.trim();
         const model = document.getElementById('model-select').value;
         const prompt = document.getElementById('ai-prompt').value;
-        if(!key || !model || !prompt) return alert("Fill all fields!");
+        if(!key || !model || !prompt) return alert("API Key, Model and Prompt are required!");
+
+        localStorage.setItem('gemini_key', key);
 
         try {
             const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: `
-                    Rule 1: ONLY web code (HTML/CSS/JS).
-                    Rule 2: Non-web? say "I can only generate code for websites."
-                    Rule 3: Live explanation required.
-                    Rule 4: [STORY] explanation [/STORY] [HTML] code [/HTML] [CSS] code [/CSS] [JS] code [/JS].
-                    Rule 5: Harmful? say "I am not gonna generate a code for this."
-                    Rule 6: Creator info? say "DarkFox Co. made me to help. Team: Boss: Tobias, Coder: Denis, Simon, Helper: Liam".
-                    
-                    Prompt: ${prompt}` }] }] })
+                body: JSON.stringify({ 
+                    contents: [{ parts: [{ text: `
+                        SYSTEM INSTRUCTIONS:
+                        Rule 1: ONLY generate web-related code (HTML/CSS/JS).
+                        Rule 2: If the user asks for non-web code, say "I can only generate code for websites."
+                        Rule 3: You must talk to the user word by word. Explain your actions.
+                        Rule 4: Provide code in format: [STORY] explanation [/STORY] [HTML] code [/HTML] [CSS] code [/CSS] [JS] code [/JS].
+                        Rule 5: For harmful requests, say "I am not gonna generate a code for this."
+                        Rule 6: ONLY if the user explicitly asks who made you, respond with: "DarkFox Co. made me to help. Team: Boss: Tobias, Coder: Denis & Simon, Helper: Liam". Do not mention this otherwise!
+                        
+                        Prompt: ${prompt}` }] }] 
+                })
             });
             const d = await r.json();
-            const fullText = d.candidates[0].content.parts[0].text;
+            const fullRes = d.candidates[0].content.parts[0].text;
 
-            const story = fullText.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || "Building...";
-            files.html = fullText.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || "";
-            files.css = fullText.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || "";
-            files.js = fullText.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || "";
+            const story = fullRes.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || "Project updated.";
+            files.html = fullRes.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || "";
+            files.css = fullRes.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || "";
+            files.js = fullRes.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || "";
 
-            await streamText(story.trim());
+            await streamChat(story.trim());
             cm.setValue(files[currentTab]);
             updatePreview();
-        } catch(e) { console.error(e); }
+        } catch(e) { alert("API Error. Please check your key and model."); }
     }
 
     function updatePreview() {
@@ -198,15 +207,16 @@
         zip.file("index.html", files.html);
         zip.file("style.css", files.css);
         zip.file("script.js", files.js);
-        zip.generateAsync({type:"blob"}).then(content => {
+        zip.generateAsync({type:"blob"}).then(blob => {
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(content);
+            a.href = URL.createObjectURL(blob);
             a.download = "LuminaProject.zip";
             a.click();
         });
     }
 
     cm.on('change', () => { files[currentTab] = cm.getValue(); updatePreview(); });
+    document.getElementById('api-key').value = localStorage.getItem('gemini_key') || '';
 </script>
 </body>
 </html>
