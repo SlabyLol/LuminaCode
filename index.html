@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode AI | Pro</title>
+    <title id="tab-title">LuminaCode AI | Intelligent Executor</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
@@ -17,60 +19,83 @@
 
     <style>
         :root {
-            --bg: #050505; --surface: #111114; --accent: #a855f7;
+            --bg: #050505; --surface: #111114; --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.4);
             --border: #27272a; --text: #fafafa;
         }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        nav { height: 60px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid var(--border); }
-        .logo { font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 8px; font-size: 1.2rem; }
+        nav { height: 65px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .logo-section { display: flex; align-items: center; gap: 15px; }
+        
+        /* Your Awesome Icon Style */
+        .app-logo { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 0 15px var(--accent-glow); }
+        
+        .project-name { font-weight: 700; color: var(--text); background: transparent; border: none; outline: none; font-size: 1.1rem; border-bottom: 1px dashed #444; transition: border-color 0.2s; }
+        .project-name:focus { border-color: var(--accent); color: var(--accent); }
         
         .main-layout { display: flex; flex: 1; overflow: hidden; }
         
-        /* AI Sidebar */
-        .sidebar { width: 320px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; gap: 15px; }
-        .sidebar h3 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
-        .input-field { background: #18181b; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        /* Sidebar */
+        .sidebar { width: 340px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px; gap: 20px; }
+        .sidebar h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #71717a; margin: 0; display: flex; align-items: center; gap: 8px; }
+        
+        .input-field { background: #09090b; border: 1px solid var(--border); color: white; padding: 14px; border-radius: 10px; width: 100%; box-sizing: border-box; outline: none; font-size: 0.9rem; }
         .input-field:focus { border-color: var(--accent); }
         
-        .btn { background: var(--accent); border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        
+        .btn { background: var(--accent); border: none; color: white; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
+        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); box-shadow: 0 0 20px var(--accent-glow); }
+        .btn-secondary { background: #18181b; border: 1px solid var(--border); margin-top: auto; }
+        .btn-secondary:hover { background: #27272a; }
+
         /* Workspace */
         .workspace { flex: 1; display: grid; grid-template-rows: 1fr 1fr; background: #000; }
-        .CodeMirror { height: 100% !important; border-bottom: 1px solid var(--border); }
+        .CodeMirror { height: 100% !important; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', 'Fira Code', monospace; }
         iframe { width: 100%; height: 100%; border: none; background: white; }
 
-        #user-profile { display: none; align-items: center; gap: 10px; background: #18181b; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); }
-        #user-profile img { width: 24px; border-radius: 50%; }
+        /* Auth UI */
+        #user-profile { display: none; align-items: center; gap: 12px; background: #18181b; padding: 6px 14px; border-radius: 30px; border: 1px solid var(--border); }
+        #user-profile img { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent); }
+        #status { font-size: 13px; font-weight: 500; height: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo"><i data-lucide="sparkles"></i> LUMINACODE AI</div>
+    <div class="logo-section">
+        <img src="logo.png" alt="L" class="app-logo" id="main-icon" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
+        <input type="text" id="project-title" class="project-name" value="My-Lumina-App" onchange="document.getElementById('tab-title').innerText = this.value + ' | LuminaCode'">
+    </div>
     <div class="auth-box">
         <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
         <div class="g_id_signin" data-type="standard"></div>
         <div id="user-profile">
-            <img id="u-img" src=""><span id="u-name" style="font-size: 13px;"></span>
+            <img id="u-img" referrerpolicy="no-referrer" src="">
+            <span id="u-name" style="font-size: 13px;"></span>
         </div>
     </div>
 </nav>
 
 <div class="main-layout">
     <aside class="sidebar">
-        <h3><i data-lucide="key"></i> API Config</h3>
-        <input type="password" id="api-key" class="input-field" placeholder="Paste Gemini API Key...">
+        <div>
+            <h3><i data-lucide="key" style="width:14px"></i> Gemini API Key</h3>
+            <input type="password" id="api-key" class="input-field" placeholder="Paste your key here...">
+        </div>
         
-        <h3 style="margin-top:20px"><i data-lucide="bot"></i> AI Prompt</h3>
-        <textarea id="ai-prompt" class="input-field" style="height: 100px; resize: none;" placeholder="e.g. Create a dark mode login form with glassmorphism..."></textarea>
-        <button class="btn" onclick="generateCode()"><i data-lucide="wand-2"></i> Generate & Run</button>
-        <div id="status" style="font-size: 12px; color: #71717a; text-align: center;"></div>
+        <div>
+            <h3><i data-lucide="bot" style="width:14px"></i> AI Assistant</h3>
+            <textarea id="ai-prompt" class="input-field" style="height: 140px; resize: none; margin-top: 8px;" placeholder="What should I build for you?"></textarea>
+            <button class="btn" style="margin-top: 10px;" onclick="generateCode()"><i data-lucide="sparkles"></i> Generate Project</button>
+        </div>
+        
+        <div id="status"></div>
+
+        <button class="btn btn-secondary" onclick="downloadFile()"><i data-lucide="download"></i> Download HTML Source</button>
     </aside>
 
     <div class="workspace">
-        <textarea id="editor"></textarea>
+        <div id="editor-container"><textarea id="editor"></textarea></div>
         <iframe id="preview"></iframe>
     </div>
 </div>
@@ -78,12 +103,11 @@
 <script>
     lucide.createIcons();
 
-    // Editor Setup
+    // Editor setup with Dracula Theme
     const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-        mode: "htmlmixed", theme: "dracula", lineNumbers: true, autoCloseTags: true
+        mode: "htmlmixed", theme: "dracula", lineNumbers: true, autoCloseTags: true, autoCloseBrackets: true
     });
 
-    // Load saved API Key
     document.getElementById('api-key').value = localStorage.getItem('gemini_key') || '';
 
     function handleSignIn(response) {
@@ -100,39 +124,48 @@
         const prompt = document.getElementById('ai-prompt').value;
         const status = document.getElementById('status');
 
-        if (!key || !prompt) return alert("Please provide both API Key and Prompt!");
+        if (!key || !prompt) return alert("Missing API Key or Prompt!");
         
         localStorage.setItem('gemini_key', key);
-        status.innerText = "AI is thinking...";
+        status.innerText = "Lumina AI is crafting code... ✨";
+        status.style.color = "#a855f7";
 
         try {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`, {
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: `Write full HTML/CSS/JS code for: ${prompt}. Return ONLY the code, no markdown backticks.` }] }]
+                    contents: [{ parts: [{ text: `Return ONLY complete, single-file HTML/CSS/JS code for: ${prompt}. Do not use markdown backticks or explanations.` }] }]
                 })
             });
 
             const result = await resp.json();
             let code = result.candidates[0].content.parts[0].text;
-            
-            // Clean markdown
             code = code.replace(/```html|```javascript|```css|```/gi, "").trim();
             
             editor.setValue(code);
             updatePreview();
-            status.innerText = "Done!";
+            status.innerText = "Project ready! ✅";
+            status.style.color = "#10b981";
         } catch (e) {
-            status.innerText = "Error: Check API Key or Connection";
+            status.innerText = "Error: Invalid API Key or limit.";
+            status.style.color = "#f43f5e";
         }
+    }
+
+    function downloadFile() {
+        const code = editor.getValue();
+        const fileName = document.getElementById('project-title').value.replace(/\s+/g, '-') + ".html";
+        const blob = new Blob([code], { type: "text/html" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        a.click();
     }
 
     function updatePreview() {
         const doc = document.getElementById('preview').contentWindow.document;
-        doc.open();
-        doc.write(editor.getValue());
-        doc.close();
+        doc.open(); doc.write(editor.getValue()); doc.close();
     }
 
     editor.on('change', () => updatePreview());
