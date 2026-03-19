@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="tab-title">LuminaCode AI | Intelligent Executor</title>
+    <title id="tab-title">LuminaCode AI | Pro</title>
     
     <link rel="icon" type="image/jpeg" href="logo.jpeg">
     
@@ -18,55 +18,39 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        :root {
-            --bg: #050505; --surface: #111114; --accent: #8b5cf6;
-            --accent-glow: rgba(139, 92, 246, 0.4);
-            --border: #27272a; --text: #fafafa;
-        }
+        :root { --bg: #050505; --surface: #111114; --accent: #8b5cf6; --border: #27272a; --text: #fafafa; }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        
-        nav { height: 65px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        nav { height: 65px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid var(--border); }
         .logo-section { display: flex; align-items: center; gap: 15px; }
-        
-        /* Your Awesome Icon Style - Optimized for JPEG */
-        .app-logo { width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--border); box-shadow: 0 0 20px var(--accent-glow); object-fit: cover; }
-        
+        .app-logo { width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--border); box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
         .project-name { font-weight: 700; color: var(--text); background: transparent; border: none; outline: none; font-size: 1.1rem; border-bottom: 1px dashed #444; }
-        .project-name:focus { border-color: var(--accent); color: var(--accent); }
         
         .main-layout { display: flex; flex: 1; overflow: hidden; }
-        
-        /* Sidebar */
         .sidebar { width: 340px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px; gap: 20px; }
-        .sidebar h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.2px; color: #71717a; margin: 0; display: flex; align-items: center; gap: 8px; }
+        .input-field { background: #09090b; border: 1px solid var(--border); color: white; padding: 14px; border-radius: 10px; width: 100%; box-sizing: border-box; outline: none; }
+        .btn { background: var(--accent); border: none; color: white; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
-        .input-field { background: #09090b; border: 1px solid var(--border); color: white; padding: 14px; border-radius: 10px; width: 100%; box-sizing: border-box; outline: none; font-size: 0.9rem; transition: border-color 0.2s; }
-        .input-field:focus { border-color: var(--accent); }
+        #user-profile { display: none; align-items: center; gap: 10px; background: #1a1a1e; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--accent); }
+        #user-profile img { width: 28px; height: 28px; border-radius: 50%; }
         
-        .btn { background: var(--accent); border: none; color: white; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
-        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); box-shadow: 0 0 25px var(--accent-glow); }
-        .btn-secondary { background: #18181b; border: 1px solid var(--border); margin-top: auto; }
-
-        /* Workspace */
         .workspace { flex: 1; display: grid; grid-template-rows: 1fr 1fr; background: #000; }
-        .CodeMirror { height: 100% !important; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; }
+        .CodeMirror { height: 100% !important; }
         iframe { width: 100%; height: 100%; border: none; background: white; }
-
-        /* Auth UI */
-        #user-profile { display: none; align-items: center; gap: 12px; background: #18181b; padding: 6px 14px; border-radius: 30px; border: 1px solid var(--border); }
-        #user-profile img { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent); }
-        #status { font-size: 13px; font-weight: 500; height: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="logo-section">
-        <img src="logo.jpeg" alt="L" class="app-logo" id="main-icon" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
-        <input type="text" id="project-title" class="project-name" value="My-Lumina-App" onchange="document.getElementById('tab-title').innerText = this.value + ' | LuminaCode'">
+        <img src="logo.jpeg" alt="L" class="app-logo" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
+        <input type="text" id="project-title" class="project-name" value="My-Lumina-App">
     </div>
     <div class="auth-box">
-        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
+        <div id="g_id_onload" 
+             data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" 
+             data-callback="handleSignIn"
+             data-auto_select="true">
+        </div>
         <div class="g_id_signin" data-type="standard"></div>
         <div id="user-profile">
             <img id="u-img" referrerpolicy="no-referrer" src="">
@@ -77,87 +61,91 @@
 
 <div class="main-layout">
     <aside class="sidebar">
-        <div>
-            <h3><i data-lucide="key" style="width:14px"></i> Gemini API Key</h3>
-            <input type="password" id="api-key" class="input-field" placeholder="Paste your key here...">
-        </div>
+        <h3><i data-lucide="key"></i> API Key</h3>
+        <input type="password" id="api-key" class="input-field" placeholder="Paste Gemini Key...">
         
-        <div>
-            <h3><i data-lucide="bot" style="width:14px"></i> AI Assistant</h3>
-            <textarea id="ai-prompt" class="input-field" style="height: 140px; resize: none; margin-top: 8px;" placeholder="What should I build for you?"></textarea>
-            <button class="btn" style="margin-top: 10px;" onclick="generateCode()"><i data-lucide="sparkles"></i> Generate Project</button>
-        </div>
+        <h3><i data-lucide="bot"></i> AI Prompt</h3>
+        <textarea id="ai-prompt" class="input-field" style="height: 140px; resize: none;" placeholder="Build something..."></textarea>
+        <button class="btn" onclick="generateCode()"><i data-lucide="sparkles"></i> Generate</button>
         
-        <div id="status"></div>
-
-        <button class="btn btn-secondary" onclick="downloadFile()"><i data-lucide="download"></i> Download HTML Source</button>
+        <div id="status" style="text-align: center; font-size: 13px;"></div>
+        <button class="btn" style="background:#27272a; margin-top:auto" onclick="downloadFile()"><i data-lucide="download"></i> Download</button>
     </aside>
 
     <div class="workspace">
-        <div id="editor-container"><textarea id="editor"></textarea></div>
+        <textarea id="editor"></textarea>
         <iframe id="preview"></iframe>
     </div>
 </div>
 
 <script>
     lucide.createIcons();
-
     const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-        mode: "htmlmixed", theme: "dracula", lineNumbers: true, autoCloseTags: true, autoCloseBrackets: true
+        mode: "htmlmixed", theme: "dracula", lineNumbers: true, autoCloseTags: true
     });
 
-    document.getElementById('api-key').value = localStorage.getItem('gemini_key') || '';
+    // Check for saved key
+    const savedKey = localStorage.getItem('gemini_key');
+    if(savedKey) document.getElementById('api-key').value = savedKey;
 
     function handleSignIn(response) {
-        const data = JSON.parse(atob(response.credential.split('.')[1]));
-        document.querySelector('.g_id_signin').style.display = 'none';
-        const profile = document.getElementById('user-profile');
-        profile.style.display = 'flex';
-        document.getElementById('u-name').innerText = data.given_name;
-        document.getElementById('u-img').src = data.picture;
+        try {
+            const data = JSON.parse(atob(response.credential.split('.')[1]));
+            document.querySelector('.g_id_signin').style.display = 'none';
+            document.getElementById('user-profile').style.display = 'flex';
+            document.getElementById('u-name').innerText = data.given_name;
+            document.getElementById('u-img').src = data.picture;
+            console.log("Logged in:", data.email);
+        } catch(e) { console.error("Login Error:", e); }
     }
 
     async function generateCode() {
-        const key = document.getElementById('api-key').value;
+        const key = document.getElementById('api-key').value.trim();
         const prompt = document.getElementById('ai-prompt').value;
         const status = document.getElementById('status');
 
-        if (!key || !prompt) return alert("Missing API Key or Prompt!");
-        
+        if (!key) return alert("Please enter an API Key!");
         localStorage.setItem('gemini_key', key);
-        status.innerText = "Lumina AI is crafting... ✨";
-        status.style.color = "#a855f7";
+        
+        status.innerText = "Lumina AI is processing...";
+        status.style.color = "#8b5cf6";
 
         try {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            // Using the latest stable v1beta endpoint
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+            const resp = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: `Generate ONLY complete HTML/CSS/JS code for: ${prompt}. No markdown, no comments, just raw code.` }] }]
+                    contents: [{ parts: [{ text: `Task: Create a single-file HTML/CSS/JS solution for: ${prompt}. Rules: Return ONLY raw code. No markdown, no intro.` }] }]
                 })
             });
 
             const result = await resp.json();
+            
+            if(result.error) {
+                throw new Error(result.error.message);
+            }
+
             let code = result.candidates[0].content.parts[0].text;
             code = code.replace(/```html|```javascript|```css|```/gi, "").trim();
             
             editor.setValue(code);
             updatePreview();
-            status.innerText = "Project ready! ✅";
+            status.innerText = "Success! ✅";
             status.style.color = "#10b981";
         } catch (e) {
-            status.innerText = "Error: Invalid API Key.";
-            status.style.color = "#f43f5e";
+            console.error(e);
+            status.innerText = "Error: " + (e.message.includes("403") ? "Invalid Key" : "Check Key/Limit");
+            status.style.color = "#ef4444";
         }
     }
 
     function downloadFile() {
-        const code = editor.getValue();
-        const fileName = document.getElementById('project-title').value.replace(/\s+/g, '-') + ".html";
-        const blob = new Blob([code], { type: "text/html" });
+        const blob = new Blob([editor.getValue()], { type: "text/html" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = fileName;
+        a.download = document.getElementById('project-title').value + ".html";
         a.click();
     }
 
@@ -165,7 +153,6 @@
         const doc = document.getElementById('preview').contentWindow.document;
         doc.open(); doc.write(editor.getValue()); doc.close();
     }
-
     editor.on('change', () => updatePreview());
 </script>
 </body>
