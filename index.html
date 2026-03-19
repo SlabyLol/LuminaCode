@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode AI | Pro</title>
+    <title>LuminaCode AI | Web Specialist</title>
     <link rel="icon" type="image/jpeg" href="logo.jpeg">
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -17,24 +20,33 @@
         :root { --bg: #050505; --surface: #0f0f12; --accent: #8b5cf6; --border: #27272a; --text: #fafafa; }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        /* Navbar & Account View */
-        nav { height: 75px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 2px solid var(--accent); }
-        .logo-section { display: flex; align-items: center; gap: 15px; }
-        .app-logo { width: 45px; height: 45px; border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); }
-        
-        .account-area { display: flex; align-items: center; gap: 15px; min-width: 200px; justify-content: flex-end; }
-        #user-info { display: none; align-items: center; gap: 10px; background: #1a1a20; padding: 8px 15px; border-radius: 50px; border: 1px solid var(--accent); box-shadow: 0 0 10px var(--accent); }
-        #u-img { width: 32px; height: 32px; border-radius: 50%; border: 1px solid white; }
-        
-        /* Sidebar */
+        nav { height: 70px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 2px solid var(--accent); }
+        .logo-section { display: flex; align-items: center; gap: 12px; }
+        .app-logo { width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--border); box-shadow: 0 0 15px var(--accent); }
+
+        .account-area { display: flex; align-items: center; gap: 10px; }
+        #user-info { display: none; align-items: center; gap: 12px; background: rgba(139, 92, 246, 0.2); padding: 5px 15px; border-radius: 30px; border: 1px solid var(--accent); }
+        #u-img { width: 30px; height: 30px; border-radius: 50%; border: 1px solid white; }
+
         .main-layout { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 350px; background: var(--surface); border-right: 1px solid var(--border); padding: 25px; display: flex; flex-direction: column; gap: 20px; }
-        .input-field, select { background: #070708; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 10px; width: 100%; outline: none; }
-        .btn { background: var(--accent); border: none; color: white; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: 700; width: 100%; }
+        .sidebar { width: 400px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; gap: 15px; }
         
-        .workspace { flex: 1; display: grid; grid-template-rows: 1fr 1fr; }
-        .CodeMirror { height: 100% !important; }
-        iframe { width: 100%; height: 100%; border: none; background: white; }
+        #chat-window { flex: 1; background: #070708; border: 1px solid var(--border); border-radius: 10px; padding: 15px; overflow-y: auto; font-size: 0.9rem; color: #bbb; }
+        .ai-name { color: var(--accent); font-weight: bold; margin-bottom: 5px; display: block; }
+        
+        .input-field { background: #1a1a1e; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; outline: none; }
+        .btn { background: var(--accent); border: none; color: white; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4); }
+
+        /* Multi-Tab System */
+        .workspace { flex: 1; display: flex; flex-direction: column; background: #000; }
+        .tab-bar { background: #111; display: flex; border-bottom: 1px solid var(--border); }
+        .tab { padding: 12px 20px; cursor: pointer; font-size: 0.8rem; color: #71717a; border-right: 1px solid var(--border); }
+        .tab.active { background: var(--surface); color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+        .editor-container { flex: 1; display: flex; flex-direction: column; }
+        .CodeMirror { flex: 1; font-size: 14px; }
+        iframe { height: 40%; background: white; border-top: 2px solid var(--border); }
     </style>
 </head>
 <body>
@@ -44,13 +56,11 @@
         <img src="logo.jpeg" alt="L" class="app-logo" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
         <h2 style="margin:0; font-size: 1.2rem;">LuminaCode AI</h2>
     </div>
-
     <div class="account-area">
         <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
         <div class="g_id_signin" data-type="standard"></div>
-        
         <div id="user-info">
-            <span id="u-name" style="font-weight: 600;"></span>
+            <span id="u-name" style="font-weight:700;"></span>
             <img id="u-img" referrerpolicy="no-referrer">
         </div>
     </div>
@@ -58,99 +68,106 @@
 
 <div class="main-layout">
     <aside class="sidebar">
-        <div>
-            <label style="font-size: 0.7rem; color: #71717a;">API KEY (Saved in Browser)</label>
-            <div style="position:relative;">
-                <input type="password" id="api-key" class="input-field" placeholder="Paste Key...">
-                <button onclick="toggleKey()" style="position:absolute; right:10px; top:10px; background:none; border:none; color:#71717a; cursor:pointer;"><i data-lucide="eye"></i></button>
-            </div>
-            <button class="btn" style="background:#27272a; margin-top:5px; padding:8px;" onclick="fetchModels()">Refresh Models</button>
+        <div id="chat-window">
+            <span class="ai-name">LuminaCode AI:</span>
+            Hello! I am your web development specialist. I only generate HTML, CSS, and JavaScript. What shall we build together today?
         </div>
-
-        <div>
-            <label style="font-size: 0.7rem; color: #71717a;">SELECT MODEL</label>
-            <select id="model-list">
-                <option value="gemini-1.5-flash">gemini-1.5-flash (Default)</option>
-            </select>
-        </div>
-        
-        <textarea id="ai-prompt" class="input-field" style="height: 120px;" placeholder="Build a login page..."></textarea>
-        <button class="btn" onclick="generateCode()">GENERATE CODE</button>
-        <div id="status" style="font-size:12px; text-align:center;"></div>
+        <input type="password" id="api-key" class="input-field" placeholder="Paste Gemini Key...">
+        <textarea id="ai-prompt" class="input-field" style="height: 100px;" placeholder="Describe your web project..."></textarea>
+        <button class="btn" onclick="generateProject()">GENERATE WEB PROJECT</button>
     </aside>
 
     <div class="workspace">
-        <textarea id="editor"></textarea>
+        <div class="tab-bar">
+            <div class="tab active" onclick="switchTab('html')">index.html</div>
+            <div class="tab" onclick="switchTab('css')">style.css</div>
+            <div class="tab" onclick="switchTab('js')">script.js</div>
+        </div>
+        <div class="editor-container">
+            <textarea id="editor"></textarea>
+        </div>
         <iframe id="preview"></iframe>
     </div>
 </div>
 
 <script>
     lucide.createIcons();
-    const editor = CodeMirror.fromTextArea(document.getElementById('editor'), { mode: "htmlmixed", theme: "dracula", lineNumbers: true });
-    
-    // Load saved Key
-    document.getElementById('api-key').value = localStorage.getItem('gemini_key') || '';
+    let currentTab = 'html';
+    let files = { html: '', css: '', js: '' };
 
-    function toggleKey() {
-        const input = document.getElementById('api-key');
-        input.type = input.type === "password" ? "text" : "password";
+    const cm = CodeMirror.fromTextArea(document.getElementById('editor'), {
+        theme: "dracula", lineNumbers: true, autoCloseTags: true, mode: "htmlmixed"
+    });
+
+    function switchTab(tab) {
+        files[currentTab] = cm.getValue();
+        currentTab = tab;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        let mode = tab === 'html' ? 'htmlmixed' : (tab === 'css' ? 'css' : 'javascript');
+        cm.setOption('mode', mode);
+        cm.setValue(files[tab]);
     }
 
-    // AUTH FIX
     function handleSignIn(response) {
         const data = JSON.parse(atob(response.credential.split('.')[1]));
         document.querySelector('.g_id_signin').style.display = 'none';
         document.getElementById('user-info').style.display = 'flex';
-        document.getElementById('u-name').innerText = data.name;
+        document.getElementById('u-name').innerText = data.given_name;
         document.getElementById('u-img').src = data.picture;
     }
 
-    // MODEL FINDER FIX
-    async function fetchModels() {
+    async function generateProject() {
         const key = document.getElementById('api-key').value.trim();
-        if(!key) return alert("Enter Key first!");
-        try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-            const data = await r.json();
-            const select = document.getElementById('model-list');
-            select.innerHTML = '';
-            data.models.forEach(m => {
-                if(m.supportedGenerationMethods.includes("generateContent")) {
-                    const opt = document.createElement('option');
-                    opt.value = m.name.split('/').pop();
-                    opt.innerText = opt.value;
-                    select.appendChild(opt);
-                }
-            });
-            alert("Models updated! Check the list.");
-        } catch(e) { alert("Could not fetch models. Key might be wrong."); }
-    }
-
-    async function generateCode() {
-        const key = document.getElementById('api-key').value.trim();
-        const model = document.getElementById('model-list').value;
         const prompt = document.getElementById('ai-prompt').value;
-        const status = document.getElementById('status');
+        const chat = document.getElementById('chat-window');
+
+        if(!key || !prompt) return alert("Key or Prompt missing!");
         
-        localStorage.setItem('gemini_key', key);
-        status.innerText = "Processing...";
+        chat.innerHTML += `<p><b>You:</b> ${prompt}</p>`;
+        chat.scrollTop = chat.scrollHeight;
 
         try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: `Code only: ${prompt}` }] }] })
+                body: JSON.stringify({ 
+                    contents: [{ parts: [{ text: `You are LuminaCode AI. 
+                    Rule 1: ONLY generate web-related code (HTML/CSS/JS). 
+                    Rule 2: If the user asks for non-web code, say "I can only generate code for websites." 
+                    Rule 3: You must talk to the user. Explain what you are doing.
+                    Rule 4: Provide the code in a JSON-like format: [STORY] your explanation [/STORY] [HTML] code [/HTML] [CSS] code [/CSS] [JS] code [/JS].
+                    Prompt: ${prompt}` }] }] 
+                })
             });
             const data = await r.json();
-            if(data.error) throw new Error(data.error.message);
-            let code = data.candidates[0].content.parts[0].text.replace(/```html|```javascript|```css|```/gi, "").trim();
-            editor.setValue(code);
-            const doc = document.getElementById('preview').contentWindow.document;
-            doc.open(); doc.write(code); doc.close();
-            status.innerText = "Done! ✅";
-        } catch (e) { status.innerText = "Error: " + e.message; }
+            const text = data.candidates[0].content.parts[0].text;
+
+            // Extract content
+            const story = text.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || "Building your project...";
+            files.html = text.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || "";
+            files.css = text.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || "";
+            files.js = text.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || "";
+
+            chat.innerHTML += `<p><span class="ai-name">LuminaCode AI:</span> ${story}</p>`;
+            chat.scrollTop = chat.scrollHeight;
+
+            cm.setValue(files[currentTab]);
+            updatePreview();
+        } catch (e) { chat.innerHTML += `<p style="color:red;">Error connecting to API.</p>`; }
     }
+
+    function updatePreview() {
+        const doc = document.getElementById('preview').contentWindow.document;
+        const finalCode = `
+            ${files.html}
+            <style>${files.css}</style>
+            <script>${files.js}<\/script>
+        `;
+        doc.open(); doc.write(finalCode); doc.close();
+    }
+    cm.on('change', () => { files[currentTab] = cm.getValue(); updatePreview(); });
 </script>
 </body>
 </html>
