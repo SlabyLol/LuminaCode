@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode AI | Intelligent Executor</title>
+    <title>LuminaCode AI | Pro</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
@@ -17,77 +17,60 @@
 
     <style>
         :root {
-            --bg: #0a0a0c;
-            --surface: #16161a;
-            --accent: #8b5cf6; /* Purple AI Theme */
-            --accent-glow: rgba(139, 92, 246, 0.4);
-            --border: #2d2d33;
-            --text: #ececed;
+            --bg: #050505; --surface: #111114; --accent: #a855f7;
+            --border: #27272a; --text: #fafafa;
         }
-
-        body {
-            margin: 0; font-family: 'Inter', sans-serif;
-            background: var(--bg); color: var(--text);
-            display: flex; flex-direction: column; height: 100vh; overflow: hidden;
-        }
-
-        /* Navbar & Auth */
-        nav {
-            height: 65px; background: var(--surface);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; border-bottom: 1px solid var(--border);
-        }
-        .logo { font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 8px; }
-        .user-section { display: flex; align-items: center; gap: 15px; }
-
-        /* AI Sidebar */
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        nav { height: 60px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid var(--border); }
+        .logo { font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 8px; font-size: 1.2rem; }
+        
         .main-layout { display: flex; flex: 1; overflow: hidden; }
-        .ai-sidebar {
-            width: 300px; background: var(--surface); border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; padding: 15px;
-        }
-        .ai-chat { flex: 1; overflow-y: auto; font-size: 13px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; padding: 10px; background: #000; }
-        .ai-input { background: #1a1a20; border: 1px solid var(--border); color: white; padding: 10px; border-radius: 6px; width: 100%; outline: none; }
-
+        
+        /* AI Sidebar */
+        .sidebar { width: 320px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; gap: 15px; }
+        .sidebar h3 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+        .input-field { background: #18181b; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .input-field:focus { border-color: var(--accent); }
+        
+        .btn { background: var(--accent); border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        
         /* Workspace */
         .workspace { flex: 1; display: grid; grid-template-rows: 1fr 1fr; background: #000; }
-        .CodeMirror { height: 100% !important; font-size: 14px; }
+        .CodeMirror { height: 100% !important; border-bottom: 1px solid var(--border); }
         iframe { width: 100%; height: 100%; border: none; background: white; }
 
-        .btn-ai { background: var(--accent); border: none; color: white; padding: 8px; border-radius: 6px; cursor: pointer; margin-top: 5px; font-weight: bold; }
-        
-        #user-info { display: none; align-items: center; gap: 10px; }
-        #user-info img { width: 32px; border-radius: 50%; }
+        #user-profile { display: none; align-items: center; gap: 10px; background: #18181b; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); }
+        #user-profile img { width: 24px; border-radius: 50%; }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo"><i data-lucide="bot"></i> LUMINACODE AI</div>
-    <div class="user-section">
-        <div id="g_id_onload"
-             data-client_id="DEINE_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
-             data-callback="handleCredentialResponse">
-        </div>
+    <div class="logo"><i data-lucide="sparkles"></i> LUMINACODE AI</div>
+    <div class="auth-box">
+        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
         <div class="g_id_signin" data-type="standard"></div>
-        <div id="user-info">
-            <span id="user-name"></span>
-            <img id="user-pic" src="" alt="Profile">
+        <div id="user-profile">
+            <img id="u-img" src=""><span id="u-name" style="font-size: 13px;"></span>
         </div>
     </div>
 </nav>
 
 <div class="main-layout">
-    <aside class="ai-sidebar">
-        <h3>AI Assistant</h3>
-        <input type="password" id="api-key" class="ai-input" placeholder="Enter Gemini API Key..." style="margin-bottom:10px">
-        <div class="ai-chat" id="chat-output">Ask the AI to generate or fix code...</div>
-        <textarea id="ai-prompt" class="ai-input" placeholder="e.g. 'Build a clock'"></textarea>
-        <button class="btn-ai" onclick="askAI()">Generate Code ⚡</button>
+    <aside class="sidebar">
+        <h3><i data-lucide="key"></i> API Config</h3>
+        <input type="password" id="api-key" class="input-field" placeholder="Paste Gemini API Key...">
+        
+        <h3 style="margin-top:20px"><i data-lucide="bot"></i> AI Prompt</h3>
+        <textarea id="ai-prompt" class="input-field" style="height: 100px; resize: none;" placeholder="e.g. Create a dark mode login form with glassmorphism..."></textarea>
+        <button class="btn" onclick="generateCode()"><i data-lucide="wand-2"></i> Generate & Run</button>
+        <div id="status" style="font-size: 12px; color: #71717a; text-align: center;"></div>
     </aside>
 
     <div class="workspace">
-        <div id="editor-wrapper"><textarea id="code-editor"></textarea></div>
+        <textarea id="editor"></textarea>
         <iframe id="preview"></iframe>
     </div>
 </div>
@@ -95,62 +78,64 @@
 <script>
     lucide.createIcons();
 
-    const editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
-        mode: "htmlmixed", theme: "dracula", lineNumbers: true
+    // Editor Setup
+    const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+        mode: "htmlmixed", theme: "dracula", lineNumbers: true, autoCloseTags: true
     });
 
-    // --- Google Auth ---
-    function handleCredentialResponse(response) {
-        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    // Load saved API Key
+    document.getElementById('api-key').value = localStorage.getItem('gemini_key') || '';
+
+    function handleSignIn(response) {
+        const data = JSON.parse(atob(response.credential.split('.')[1]));
         document.querySelector('.g_id_signin').style.display = 'none';
-        document.getElementById('user-info').style.display = 'flex';
-        document.getElementById('user-name').innerText = payload.name;
-        document.getElementById('user-pic').src = payload.picture;
-        console.log("Logged in as: " + payload.email);
+        const profile = document.getElementById('user-profile');
+        profile.style.display = 'flex';
+        document.getElementById('u-name').innerText = data.given_name;
+        document.getElementById('u-img').src = data.picture;
     }
 
-    // --- Gemini AI Integration ---
-    async function askAI() {
-        const apiKey = document.getElementById('api-key').value;
+    async function generateCode() {
+        const key = document.getElementById('api-key').value;
         const prompt = document.getElementById('ai-prompt').value;
-        const chatOutput = document.getElementById('chat-output');
+        const status = document.getElementById('status');
 
-        if (!apiKey) return alert("Please enter your Gemini API Key!");
-
-        chatOutput.innerHTML = "Thinking...";
+        if (!key || !prompt) return alert("Please provide both API Key and Prompt!");
+        
+        localStorage.setItem('gemini_key', key);
+        status.innerText = "AI is thinking...";
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: `Generate only the HTML/CSS/JS code for: ${prompt}. Do not explain, just code.` }] }]
+                    contents: [{ parts: [{ text: `Write full HTML/CSS/JS code for: ${prompt}. Return ONLY the code, no markdown backticks.` }] }]
                 })
             });
 
-            const data = await response.json();
-            let aiCode = data.candidates[0].content.parts[0].text;
+            const result = await resp.json();
+            let code = result.candidates[0].content.parts[0].text;
             
-            // Clean code block markdown if present
-            aiCode = aiCode.replace(/```html|```/g, "");
+            // Clean markdown
+            code = code.replace(/```html|```javascript|```css|```/gi, "").trim();
             
-            editor.setValue(aiCode);
-            runCode();
-            chatOutput.innerHTML = "Code updated!";
-        } catch (error) {
-            chatOutput.innerHTML = "Error: " + error.message;
+            editor.setValue(code);
+            updatePreview();
+            status.innerText = "Done!";
+        } catch (e) {
+            status.innerText = "Error: Check API Key or Connection";
         }
     }
 
-    function runCode() {
-        const previewFrame = document.getElementById('preview').contentWindow.document;
-        previewFrame.open();
-        previewFrame.write(editor.getValue());
-        previewFrame.close();
+    function updatePreview() {
+        const doc = document.getElementById('preview').contentWindow.document;
+        doc.open();
+        doc.write(editor.getValue());
+        doc.close();
     }
 
-    editor.on('change', () => runCode());
+    editor.on('change', () => updatePreview());
 </script>
-
 </body>
 </html>
