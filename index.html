@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="tab-title">LuminaCode AI | Intelligent Executor</title>
     
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/jpeg" href="logo.jpeg">
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
@@ -28,29 +28,28 @@
         nav { height: 65px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         .logo-section { display: flex; align-items: center; gap: 15px; }
         
-        /* Your Awesome Icon Style */
-        .app-logo { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 0 15px var(--accent-glow); }
+        /* Your Awesome Icon Style - Optimized for JPEG */
+        .app-logo { width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--border); box-shadow: 0 0 20px var(--accent-glow); object-fit: cover; }
         
-        .project-name { font-weight: 700; color: var(--text); background: transparent; border: none; outline: none; font-size: 1.1rem; border-bottom: 1px dashed #444; transition: border-color 0.2s; }
+        .project-name { font-weight: 700; color: var(--text); background: transparent; border: none; outline: none; font-size: 1.1rem; border-bottom: 1px dashed #444; }
         .project-name:focus { border-color: var(--accent); color: var(--accent); }
         
         .main-layout { display: flex; flex: 1; overflow: hidden; }
         
         /* Sidebar */
         .sidebar { width: 340px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px; gap: 20px; }
-        .sidebar h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #71717a; margin: 0; display: flex; align-items: center; gap: 8px; }
+        .sidebar h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.2px; color: #71717a; margin: 0; display: flex; align-items: center; gap: 8px; }
         
-        .input-field { background: #09090b; border: 1px solid var(--border); color: white; padding: 14px; border-radius: 10px; width: 100%; box-sizing: border-box; outline: none; font-size: 0.9rem; }
+        .input-field { background: #09090b; border: 1px solid var(--border); color: white; padding: 14px; border-radius: 10px; width: 100%; box-sizing: border-box; outline: none; font-size: 0.9rem; transition: border-color 0.2s; }
         .input-field:focus { border-color: var(--accent); }
         
         .btn { background: var(--accent); border: none; color: white; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
-        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); box-shadow: 0 0 20px var(--accent-glow); }
+        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); box-shadow: 0 0 25px var(--accent-glow); }
         .btn-secondary { background: #18181b; border: 1px solid var(--border); margin-top: auto; }
-        .btn-secondary:hover { background: #27272a; }
 
         /* Workspace */
         .workspace { flex: 1; display: grid; grid-template-rows: 1fr 1fr; background: #000; }
-        .CodeMirror { height: 100% !important; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+        .CodeMirror { height: 100% !important; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; }
         iframe { width: 100%; height: 100%; border: none; background: white; }
 
         /* Auth UI */
@@ -63,7 +62,7 @@
 
 <nav>
     <div class="logo-section">
-        <img src="logo.png" alt="L" class="app-logo" id="main-icon" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
+        <img src="logo.jpeg" alt="L" class="app-logo" id="main-icon" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
         <input type="text" id="project-title" class="project-name" value="My-Lumina-App" onchange="document.getElementById('tab-title').innerText = this.value + ' | LuminaCode'">
     </div>
     <div class="auth-box">
@@ -103,7 +102,6 @@
 <script>
     lucide.createIcons();
 
-    // Editor setup with Dracula Theme
     const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
         mode: "htmlmixed", theme: "dracula", lineNumbers: true, autoCloseTags: true, autoCloseBrackets: true
     });
@@ -127,7 +125,7 @@
         if (!key || !prompt) return alert("Missing API Key or Prompt!");
         
         localStorage.setItem('gemini_key', key);
-        status.innerText = "Lumina AI is crafting code... ✨";
+        status.innerText = "Lumina AI is crafting... ✨";
         status.style.color = "#a855f7";
 
         try {
@@ -135,7 +133,7 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: `Return ONLY complete, single-file HTML/CSS/JS code for: ${prompt}. Do not use markdown backticks or explanations.` }] }]
+                    contents: [{ parts: [{ text: `Generate ONLY complete HTML/CSS/JS code for: ${prompt}. No markdown, no comments, just raw code.` }] }]
                 })
             });
 
@@ -148,7 +146,7 @@
             status.innerText = "Project ready! ✅";
             status.style.color = "#10b981";
         } catch (e) {
-            status.innerText = "Error: Invalid API Key or limit.";
+            status.innerText = "Error: Invalid API Key.";
             status.style.color = "#f43f5e";
         }
     }
