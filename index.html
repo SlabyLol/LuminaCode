@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode AI | Web Specialist</title>
+    <title>LuminaCode AI | Pro Web Environment</title>
     <link rel="icon" type="image/jpeg" href="logo.jpeg">
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -20,33 +20,45 @@
         :root { --bg: #050505; --surface: #0f0f12; --accent: #8b5cf6; --border: #27272a; --text: #fafafa; }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        nav { height: 70px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 2px solid var(--accent); }
+        /* Navbar */
+        nav { height: 70px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 2px solid var(--accent); z-index: 100; }
         .logo-section { display: flex; align-items: center; gap: 12px; }
-        .app-logo { width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--border); box-shadow: 0 0 15px var(--accent); }
+        .app-logo { width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--border); box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); object-fit: cover; }
 
+        /* Account View */
         .account-area { display: flex; align-items: center; gap: 10px; }
-        #user-info { display: none; align-items: center; gap: 12px; background: rgba(139, 92, 246, 0.2); padding: 5px 15px; border-radius: 30px; border: 1px solid var(--accent); }
+        #user-info { display: none; align-items: center; gap: 12px; background: rgba(139, 92, 246, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid var(--accent); box-shadow: 0 0 10px var(--accent); }
         #u-img { width: 30px; height: 30px; border-radius: 50%; border: 1px solid white; }
+        #u-name { font-size: 13px; font-weight: 700; color: white; }
 
+        /* Main Layout */
         .main-layout { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 400px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; gap: 15px; }
+        .sidebar { width: 380px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; gap: 15px; }
         
-        #chat-window { flex: 1; background: #070708; border: 1px solid var(--border); border-radius: 10px; padding: 15px; overflow-y: auto; font-size: 0.9rem; color: #bbb; }
-        .ai-name { color: var(--accent); font-weight: bold; margin-bottom: 5px; display: block; }
+        /* Chat Window */
+        #chat-window { flex: 1; background: #070708; border: 1px solid var(--border); border-radius: 10px; padding: 15px; overflow-y: auto; font-size: 0.85rem; color: #bbb; line-height: 1.4; border-left: 3px solid var(--accent); }
+        .ai-label { color: var(--accent); font-weight: bold; margin-bottom: 4px; display: block; }
+        .user-label { color: #555; font-weight: bold; margin-top: 10px; display: block; }
         
-        .input-field { background: #1a1a1e; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; outline: none; }
-        .btn { background: var(--accent); border: none; color: white; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4); }
+        .input-field { background: #1a1a1e; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; outline: none; transition: 0.2s; }
+        .input-field:focus { border-color: var(--accent); }
+        
+        .btn { background: var(--accent); border: none; color: white; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); }
 
-        /* Multi-Tab System */
+        /* Multi-Tab Workspace */
         .workspace { flex: 1; display: flex; flex-direction: column; background: #000; }
         .tab-bar { background: #111; display: flex; border-bottom: 1px solid var(--border); }
-        .tab { padding: 12px 20px; cursor: pointer; font-size: 0.8rem; color: #71717a; border-right: 1px solid var(--border); }
-        .tab.active { background: var(--surface); color: var(--accent); border-bottom: 2px solid var(--accent); }
+        .tab { padding: 12px 20px; cursor: pointer; font-size: 0.8rem; color: #71717a; border-right: 1px solid var(--border); position: relative; }
+        .tab.active { background: var(--surface); color: var(--accent); font-weight: bold; }
+        .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--accent); }
 
-        .editor-container { flex: 1; display: flex; flex-direction: column; }
-        .CodeMirror { flex: 1; font-size: 14px; }
-        iframe { height: 40%; background: white; border-top: 2px solid var(--border); }
+        .editor-container { flex: 1; display: flex; flex-direction: column; position: relative; }
+        .CodeMirror { flex: 1; font-size: 14px; height: 100% !important; }
+        
+        /* Preview Frame */
+        #preview-container { height: 40%; background: white; border-top: 3px solid var(--border); position: relative; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
@@ -54,13 +66,13 @@
 <nav>
     <div class="logo-section">
         <img src="logo.jpeg" alt="L" class="app-logo" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
-        <h2 style="margin:0; font-size: 1.2rem;">LuminaCode AI</h2>
+        <h2 style="margin:0; font-size: 1.2rem; letter-spacing: 1px;">LuminaCode AI</h2>
     </div>
     <div class="account-area">
-        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
-        <div class="g_id_signin" data-type="standard"></div>
+        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn" data-auto_prompt="false"></div>
+        <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black"></div>
         <div id="user-info">
-            <span id="u-name" style="font-weight:700;"></span>
+            <span id="u-name"></span>
             <img id="u-img" referrerpolicy="no-referrer">
         </div>
     </div>
@@ -69,41 +81,71 @@
 <div class="main-layout">
     <aside class="sidebar">
         <div id="chat-window">
-            <span class="ai-name">LuminaCode AI:</span>
-            Hello! I am your web development specialist. I only generate HTML, CSS, and JavaScript. What shall we build together today?
+            <span class="ai-label">LuminaCode AI:</span>
+            Hello! I am your web specialist. I generate HTML, CSS, and JS. How can I help you today?
         </div>
-        <input type="password" id="api-key" class="input-field" placeholder="Paste Gemini Key...">
-        <textarea id="ai-prompt" class="input-field" style="height: 100px;" placeholder="Describe your web project..."></textarea>
-        <button class="btn" onclick="generateProject()">GENERATE WEB PROJECT</button>
+        
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-size: 0.65rem; color: #71717a; text-transform: uppercase;">Credentials</label>
+            <input type="password" id="api-key" class="input-field" placeholder="Gemini API Key...">
+            <button class="btn" style="background:#18181b; font-size: 11px; padding: 8px;" onclick="syncModels()">
+                <i data-lucide="refresh-cw" style="width:14px;"></i> Sync API Models
+            </button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-size: 0.65rem; color: #71717a; text-transform: uppercase;">Selected Engine</label>
+            <select id="model-select" class="input-field">
+                <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+            </select>
+        </div>
+
+        <textarea id="ai-prompt" class="input-field" style="height: 120px; resize: none;" placeholder="E.g.: Create a modern login page with a glassmorphism effect..."></textarea>
+        
+        <button class="btn" onclick="generateProject()">
+            <i data-lucide="sparkles"></i> Build Project
+        </button>
+        
+        <button class="btn" style="background: #27272a; margin-top: auto;" onclick="downloadZip()">
+            <i data-lucide="download"></i> Download Files
+        </button>
     </aside>
 
     <div class="workspace">
         <div class="tab-bar">
-            <div class="tab active" onclick="switchTab('html')">index.html</div>
-            <div class="tab" onclick="switchTab('css')">style.css</div>
-            <div class="tab" onclick="switchTab('js')">script.js</div>
+            <div class="tab active" id="tab-html" onclick="switchTab('html')">index.html</div>
+            <div class="tab" id="tab-css" onclick="switchTab('css')">style.css</div>
+            <div class="tab" id="tab-js" onclick="switchTab('js')">script.js</div>
         </div>
         <div class="editor-container">
             <textarea id="editor"></textarea>
         </div>
-        <iframe id="preview"></iframe>
+        <div id="preview-container">
+            <iframe id="preview"></iframe>
+        </div>
     </div>
 </div>
 
 <script>
     lucide.createIcons();
     let currentTab = 'html';
-    let files = { html: '', css: '', js: '' };
+    let files = { 
+        html: '<!DOCTYPE html>\n<html>\n<body>\n  <h1>LuminaCode Ready</h1>\n</body>\n</html>', 
+        css: 'body { background: #fff; font-family: sans-serif; }', 
+        js: 'console.log("LuminaCode Loaded");' 
+    };
 
     const cm = CodeMirror.fromTextArea(document.getElementById('editor'), {
-        theme: "dracula", lineNumbers: true, autoCloseTags: true, mode: "htmlmixed"
+        theme: "dracula", lineNumbers: true, autoCloseTags: true, mode: "htmlmixed",
+        tabSize: 4, indentUnit: 4, lineWrapping: true
     });
+    cm.setValue(files.html);
 
     function switchTab(tab) {
         files[currentTab] = cm.getValue();
         currentTab = tab;
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        event.target.classList.add('active');
+        document.getElementById('tab-' + tab).classList.add('active');
         
         let mode = tab === 'html' ? 'htmlmixed' : (tab === 'css' ? 'css' : 'javascript');
         cm.setOption('mode', mode);
@@ -114,62 +156,104 @@
         const data = JSON.parse(atob(response.credential.split('.')[1]));
         document.querySelector('.g_id_signin').style.display = 'none';
         document.getElementById('user-info').style.display = 'flex';
-        document.getElementById('u-name').innerText = data.given_name;
+        document.getElementById('u-name').innerText = data.given_name || data.name;
         document.getElementById('u-img').src = data.picture;
+    }
+
+    async function syncModels() {
+        const key = document.getElementById('api-key').value.trim();
+        if(!key) return alert("Please enter your API Key first.");
+        try {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+            const data = await r.json();
+            const select = document.getElementById('model-select');
+            select.innerHTML = '';
+            data.models.forEach(m => {
+                if(m.supportedGenerationMethods.includes("generateContent")) {
+                    const opt = document.createElement('option');
+                    opt.value = m.name.split('/').pop();
+                    opt.innerText = opt.value;
+                    if(opt.value.includes('flash')) opt.selected = true;
+                    select.appendChild(opt);
+                }
+            });
+            alert("API Verified! Models synced.");
+        } catch(e) { alert("Check failed. Verify your key."); }
     }
 
     async function generateProject() {
         const key = document.getElementById('api-key').value.trim();
+        const model = document.getElementById('model-select').value;
         const prompt = document.getElementById('ai-prompt').value;
         const chat = document.getElementById('chat-window');
 
-        if(!key || !prompt) return alert("Key or Prompt missing!");
+        if(!key || !prompt) return alert("Key and Prompt are required!");
         
-        chat.innerHTML += `<p><b>You:</b> ${prompt}</p>`;
+        localStorage.setItem('gemini_key', key);
+        chat.innerHTML += `<span class="user-label">You:</span> ${prompt}`;
         chat.scrollTop = chat.scrollHeight;
 
         try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    contents: [{ parts: [{ text: `You are LuminaCode AI. 
-                    Rule 1: ONLY generate web-related code (HTML/CSS/JS). 
-                    Rule 2: If the user asks for non-web code, say "I can only generate code for websites." 
-                    Rule 3: You must talk to the user. Explain what you are doing.
-                    Rule 4: Provide the code in a JSON-like format: [STORY] your explanation [/STORY] [HTML] code [/HTML] [CSS] code [/CSS] [JS] code [/JS].
-                    Rule 5: If the user wants something that could be dangerous or that can harm someone just "I am not gonna generate a code for this."
-                    Rule 6: If the user asks who made response just whit "DarkFox Co. made me to help"
-                    Prompt: ${prompt}` }] }] 
+                    contents: [{ parts: [{ text: `
+                        SYSTEM RULES:
+                        Rule 1: ONLY generate web-related code (HTML/CSS/JS).
+                        Rule 2: If the user asks for non-web code (like Python, C++, etc.), strictly say: "I can only generate code for websites."
+                        Rule 3: You must talk to the user naturally. Explain your steps and choices.
+                        Rule 4: Output format must be: [STORY] your interactive explanation [/STORY] [HTML] code [/HTML] [CSS] code [/CSS] [JS] code [/JS].
+                        Rule 5: If the request is dangerous, harmful, or unethical, strictly say: "I am not gonna generate a code for this."
+                        Rule 6: ONLY if the user explicitly asks who created or made you, respond with: "DarkFox Co. made me to help".
+                        
+                        Current Prompt: ${prompt}` }] }] 
                 })
             });
             const data = await r.json();
             const text = data.candidates[0].content.parts[0].text;
 
-            // Extract content
-            const story = text.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || "Building your project...";
-            files.html = text.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || "";
-            files.css = text.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || "";
-            files.js = text.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || "";
+            // Parsing content with regex
+            const story = text.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || "Here is your updated web project.";
+            files.html = text.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || files.html;
+            files.css = text.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || files.css;
+            files.js = text.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || files.js;
 
-            chat.innerHTML += `<p><span class="ai-name">LuminaCode AI:</span> ${story}</p>`;
+            chat.innerHTML += `<p><span class="ai-label">LuminaCode AI:</span> ${story.trim()}</p>`;
             chat.scrollTop = chat.scrollHeight;
 
             cm.setValue(files[currentTab]);
             updatePreview();
-        } catch (e) { chat.innerHTML += `<p style="color:red;">Error connecting to API.</p>`; }
+        } catch (e) { chat.innerHTML += `<p style="color:#ef4444;">Error: API connection failed.</p>`; }
     }
 
     function updatePreview() {
         const doc = document.getElementById('preview').contentWindow.document;
-        const finalCode = `
+        const combined = `
             ${files.html}
             <style>${files.css}</style>
             <script>${files.js}<\/script>
         `;
-        doc.open(); doc.write(finalCode); doc.close();
+        doc.open(); doc.write(combined); doc.close();
     }
-    cm.on('change', () => { files[currentTab] = cm.getValue(); updatePreview(); });
+
+    function downloadZip() {
+        const h = files.html, c = files.css, j = files.js;
+        const combined = `${h}\n<style>${c}</style>\n<script>${j}<\/script>`;
+        const blob = new Blob([combined], {type: 'text/html'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'LuminaProject.html';
+        a.click();
+    }
+
+    cm.on('change', () => { 
+        files[currentTab] = cm.getValue(); 
+        updatePreview(); 
+    });
+
+    // Auto-load key
+    document.getElementById('api-key').value = localStorage.getItem('gemini_key') || '';
 </script>
 </body>
 </html>
