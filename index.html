@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode Fix</title>
+    <title>LuminaCode AI</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -27,20 +27,18 @@
         .main-layout { display: flex; flex: 1; overflow: hidden; }
         .sidebar { width: 400px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; gap: 15px; overflow-y: auto; }
         
-        #chat-window { min-height: 160px; background: #070708; border: 1px solid var(--border); border-radius: 10px; padding: 15px; font-size: 0.9rem; color: #bbb; border-left: 3px solid var(--accent); overflow-y: auto; }
+        #chat-window { min-height: 200px; background: #070708; border: 1px solid var(--border); border-radius: 10px; padding: 15px; font-size: 0.9rem; color: #eee; border-left: 3px solid var(--accent); overflow-y: auto; line-height: 1.5; }
         
-        .input-field, select { background: #1a1a1e; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; outline: none; font-size: 0.85rem; transition: 0.2s; }
-        .input-field:focus { border-color: var(--accent); }
-        
+        .input-field, select { background: #1a1a1e; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; outline: none; font-size: 0.85rem; }
         .btn-row { display: flex; gap: 10px; }
         .btn { flex: 1; border: none; color: white; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.8rem; }
-        .btn-send { background: #18181b; border: 1px solid var(--border); }
+        .btn-send { background: #18181b; border: 1px solid var(--accent); }
         .btn-execute { background: var(--accent); }
-        .btn:hover { transform: translateY(-2px); filter: brightness(1.2); }
+        .btn:hover { transform: scale(1.02); filter: brightness(1.2); }
 
         .workspace { flex: 1; display: flex; flex-direction: column; background: #000; overflow: hidden; }
         .tab-bar { background: #111; display: flex; border-bottom: 1px solid var(--border); }
-        .tab { padding: 12px 20px; cursor: pointer; font-size: 0.8rem; color: #71717a; border-right: 1px solid var(--border); transition: 0.2s; }
+        .tab { padding: 12px 20px; cursor: pointer; font-size: 0.8rem; color: #71717a; border-right: 1px solid var(--border); }
         .tab.active { background: var(--surface); color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: bold; }
 
         .editor-container { flex: 1; display: flex; flex-direction: column; min-height: 0; }
@@ -65,35 +63,32 @@
 
 <div class="main-layout">
     <aside class="sidebar">
-        <div id="chat-window"><b>LuminaCode AI:</b> Ready. Please sync your API key first.</div>
+        <div id="chat-window"><b>LuminaCode AI:</b> System Online. Waiting for input...</div>
         
-        <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px;">
-            <label style="font-size: 10px; color: #71717a; margin-bottom: 5px; display: block;">STEP 1: API CONFIG</label>
-            <input type="password" id="api-key" class="input-field" placeholder="Enter API Key...">
-            <button class="btn" style="background:#27272a; margin-top:8px; width:100%;" onclick="syncModels()">
-                <i data-lucide="refresh-cw"></i> SYNC & CHECK MODELS
+        <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; border: 1px solid #222;">
+            <label style="font-size: 10px; color: #71717a; display: block; margin-bottom: 5px;">API CONTROLLER</label>
+            <input type="password" id="api-key" class="input-field" placeholder="Gemini API Key...">
+            <button class="btn" style="background:#111; margin-top:8px; width:100%; border:1px solid #333;" onclick="syncModels()">
+                <i data-lucide="zap"></i> CHECK API & SYNC
             </button>
         </div>
 
-        <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px;">
-            <label style="font-size: 10px; color: #71717a; margin-bottom: 5px; display: block;">STEP 2: SELECT ENGINE</label>
-            <select id="model-select" class="input-field">
-                <option value="">Awaiting Sync...</option>
-            </select>
-        </div>
+        <select id="model-select" class="input-field">
+            <option value="">No Engine...</option>
+        </select>
 
-        <textarea id="ai-prompt" class="input-field" style="height: 100px; resize:none;" placeholder="Describe your web idea..."></textarea>
+        <textarea id="ai-prompt" class="input-field" style="height: 100px; resize:none;" placeholder="Type here (Code or Question)..."></textarea>
         
         <div class="btn-row">
             <button class="btn btn-send" onclick="askAI()">
-                <i data-lucide="send"></i> SEND
+                <i data-lucide="message-square"></i> SEND
             </button>
             <button class="btn btn-execute" onclick="executeBuild()">
                 <i data-lucide="play"></i> EXECUTE
             </button>
         </div>
         
-        <button class="btn" style="background:#18181b; border: 1px solid var(--border);" onclick="downloadZip()">
+        <button class="btn" style="background:#000; border: 1px solid #333;" onclick="downloadZip()">
             <i data-lucide="archive"></i> DOWNLOAD ZIP
         </button>
     </aside>
@@ -140,33 +135,32 @@
 
     async function syncModels() {
         const key = document.getElementById('api-key').value.trim();
-        if(!key) return alert("Please provide a Key!");
         try {
             const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-            const data = await r.json();
-            const select = document.getElementById('model-select');
-            select.innerHTML = '';
-            data.models.forEach(m => {
+            const d = await r.json();
+            const sel = document.getElementById('model-select');
+            sel.innerHTML = '';
+            d.models.forEach(m => {
                 if(m.supportedGenerationMethods.includes("generateContent")) {
-                    const opt = document.createElement('option');
-                    opt.value = m.name.split('/').pop();
-                    opt.innerText = opt.value;
-                    if(opt.value.includes('flash')) opt.selected = true;
-                    select.appendChild(opt);
+                    const o = document.createElement('option');
+                    o.value = m.name.split('/').pop();
+                    o.innerText = o.value;
+                    if(o.value.includes('flash')) o.selected = true;
+                    sel.appendChild(o);
                 }
             });
-            alert("API Sync Complete. Models detected.");
-        } catch(e) { alert("Invalid Key or Network Error."); }
+            alert("API Ready. Engine linked.");
+        } catch(e) { alert("Key Error."); }
     }
 
-    async function streamText(text) {
+    async function streamChat(text) {
         const chat = document.getElementById('chat-window');
         chat.innerHTML = "<b>LuminaCode AI:</b> ";
-        const words = text.split(' ');
-        for (let word of words) {
-            chat.innerHTML += word + " ";
+        const chars = text.split('');
+        for (let char of chars) {
+            chat.innerHTML += char;
             chat.scrollTop = chat.scrollHeight;
-            await new Promise(r => setTimeout(r, 40)); 
+            await new Promise(r => setTimeout(r, 10));
         }
     }
 
@@ -174,44 +168,46 @@
         const key = document.getElementById('api-key').value;
         const model = document.getElementById('model-select').value;
         const prompt = document.getElementById('ai-prompt').value;
-        if(!key || !model || !prompt) return alert("Fill out all settings!");
-
-        localStorage.setItem('gemini_key', key);
+        if(!key || !model || !prompt) return alert("Missing Settings!");
 
         try {
             const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    contents: [{ parts: [{ text: `
-                        SYSTEM IDENTITY & RULES:
-                        You are LuminaCode AI. Your current model engine is: ${model}. You MUST recognize this.
-                        Rule 1: ONLY generate web-related code (HTML/CSS/JS).
-                        Rule 2: If asked for non-web code (Python, Java, etc.), say "I can only generate code for websites."
-                        Rule 3: Talk to the user live. Explain what you are doing in the [STORY] tag.
-                        Rule 4: Output Format: [STORY] explanation [/STORY] [HTML] code [/HTML] [CSS] code [/CSS] [JS] code [/JS].
-                        Rule 5: For harmful requests, say "I am not gonna generate a code for this."
-                        Rule 6: ONLY if the user explicitly asks who created you, say "DarkFox Co. made me to help. Team: Boss: Tobias, Coder: Denis & Simon, Helper: Liam".
-                        
-                        Prompt: ${prompt}` }] }] 
-                })
+                body: JSON.stringify({ contents: [{ parts: [{ text: `
+                    SYSTEM CONFIG:
+                    Rule 1: ONLY generate web-related code (HTML/CSS/JS).
+                    Rule 2: Non-web request? say "I can only generate code for websites."
+                    Rule 3: You MUST talk live to the user. Answer questions about yourself and the crew instantly.
+                    Rule 4: Format for code: [STORY] your answer [/STORY] [HTML] code [/HTML] [CSS] code [/CSS] [JS] code [/JS].
+                    Rule 5: Dangerous? say "I am not gonna generate a code for this."
+                    Rule 6: Creator/Crew Info: 
+                       - If asked "who made you" or "who is the team": "DarkFox Co. made me to help. Team: Boss: Tobias, Coder: Denis & Simon, Helper: Liam".
+                       - If asked about Tobias: "Tobias is the Boss of DarkFox Co."
+                       - If asked about Denis or Simon: "Denis and Simon are the lead coders."
+                       - If asked about Liam: "Liam is the helper of the crew."
+                    Current Model Engine: ${model}.
+
+                    Prompt: ${prompt}` }] }] })
             });
             const d = await r.json();
             const fullText = d.candidates[0].content.parts[0].text;
             
-            const story = fullText.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || "Build complete. Click Execute.";
+            const story = fullText.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || fullText;
             lastGeneratedData = {
                 html: fullText.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || "",
                 css: fullText.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || "",
                 js: fullText.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || ""
             };
 
-            await streamText(story.trim());
-        } catch(e) { alert("Generation failed. Check API Usage/Key."); }
+            await streamChat(story.trim());
+        } catch(e) { alert("API Error."); }
     }
 
     function executeBuild() {
-        if(!lastGeneratedData) return alert("Press SEND first!");
+        if(!lastGeneratedData || (!lastGeneratedData.html && !lastGeneratedData.css)) {
+            return alert("No code generated yet. Use SEND first!");
+        }
         files.html = lastGeneratedData.html;
         files.css = lastGeneratedData.css;
         files.js = lastGeneratedData.js;
@@ -232,7 +228,10 @@
         zip.file("style.css", files.css);
         zip.file("script.js", files.js);
         zip.generateAsync({type:"blob"}).then(b => {
-            const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = "LuminaProject.zip"; a.click();
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(b);
+            a.download = "LuminaProject.zip";
+            a.click();
         });
     }
 
