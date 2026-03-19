@@ -26,7 +26,6 @@
         * { box-sizing: border-box; }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        /* Navbar */
         nav { 
             height: 70px; background: var(--surface); display: flex; align-items: center; 
             justify-content: space-between; padding: 0 25px; border-bottom: 1px solid var(--border);
@@ -35,9 +34,7 @@
         .logo-section { display: flex; align-items: center; gap: 15px; }
         .app-logo { width: 45px; height: 45px; border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 0 20px var(--accent-glow); object-fit: cover; }
         .project-input { background: transparent; border: none; color: white; font-size: 1.1rem; font-weight: 700; outline: none; border-bottom: 1px dashed #444; width: 200px; }
-        .project-input:focus { border-color: var(--accent); }
 
-        /* User Profile Area */
         .auth-container { display: flex; align-items: center; gap: 15px; }
         #user-profile { 
             display: none; align-items: center; gap: 12px; background: #1a1a20; 
@@ -45,29 +42,29 @@
             box-shadow: 0 0 10px var(--accent-glow);
         }
         #u-img { width: 30px; height: 30px; border-radius: 50%; border: 1px solid white; }
-        #u-name { font-size: 14px; font-weight: 600; color: white; }
 
-        /* Main Layout */
         .main-layout { display: flex; flex: 1; overflow: hidden; }
         .sidebar { width: 350px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px; gap: 20px; }
         
         .section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: #71717a; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .input-field { background: #070708; border: 1px solid var(--border); color: white; padding: 15px; border-radius: 12px; width: 100%; outline: none; transition: 0.2s; font-size: 0.9rem; }
-        .input-field:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); }
         
+        /* API Key Container with Eye Toggle */
+        .api-container { position: relative; width: 100%; }
+        .input-field { background: #070708; border: 1px solid var(--border); color: white; padding: 15px; border-radius: 12px; width: 100%; outline: none; transition: 0.2s; font-size: 0.9rem; }
+        .input-field:focus { border-color: var(--accent); }
+        .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #71717a; cursor: pointer; display: flex; align-items: center; }
+        .eye-btn:hover { color: var(--accent); }
+
         .btn { 
             background: var(--accent); border: none; color: white; padding: 16px; border-radius: 12px; 
             cursor: pointer; font-weight: 800; display: flex; align-items: center; justify-content: center; 
             gap: 10px; transition: 0.3s; text-transform: uppercase; font-size: 0.85rem;
         }
         .btn:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 20px var(--accent-glow); }
-        .btn-download { background: #18181b; border: 1px solid var(--border); margin-top: auto; }
 
-        /* Code & Preview */
         .workspace { flex: 1; display: grid; grid-template-rows: 1fr 1fr; background: #000; }
         .CodeMirror { height: 100% !important; font-size: 14px; }
         iframe { width: 100%; height: 100%; border: none; background: white; }
-        
         #status { font-size: 13px; text-align: center; font-weight: 500; min-height: 20px; }
     </style>
 </head>
@@ -75,18 +72,13 @@
 
 <nav>
     <div class="logo-section">
-        <img src="logo.jpeg" alt="L" class="app-logo" id="nav-logo" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
+        <img src="logo.jpeg" alt="L" class="app-logo" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Lumina'">
         <input type="text" id="project-title" class="project-input" value="Lumina-Project-1">
     </div>
     
     <div class="auth-container">
-        <div id="g_id_onload" 
-             data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" 
-             data-callback="handleSignIn"
-             data-auto_prompt="false">
-        </div>
+        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
         <div class="g_id_signin" data-type="standard" data-theme="filled_black" data-shape="pill"></div>
-        
         <div id="user-profile">
             <span id="u-name"></span>
             <img id="u-img" referrerpolicy="no-referrer" src="">
@@ -98,105 +90,102 @@
     <aside class="sidebar">
         <div>
             <div class="section-title"><i data-lucide="key"></i> Gemini API Key</div>
-            <input type="password" id="api-key" class="input-field" placeholder="Paste your Gemini Key...">
+            <div class="api-container">
+                <input type="password" id="api-key" class="input-field" placeholder="Paste your Gemini Key...">
+                <button class="eye-btn" onclick="toggleKey()"><i id="eye-icon" data-lucide="eye"></i></button>
+            </div>
         </div>
         
         <div>
             <div class="section-title"><i data-lucide="bot"></i> AI Prompt</div>
-            <textarea id="ai-prompt" class="input-field" style="height: 150px; resize: none;" placeholder="Describe what you want to build... (e.g. 'A futuristic weather app')"></textarea>
+            <textarea id="ai-prompt" class="input-field" style="height: 150px; resize: none;" placeholder="Describe what you want to build..."></textarea>
             <button class="btn" style="margin-top: 15px;" onclick="generateCode()"><i data-lucide="sparkles"></i> Magic Build</button>
         </div>
         
         <div id="status"></div>
-
-        <button class="btn btn-download" onclick="downloadFile()"><i data-lucide="download"></i> Download Source</button>
+        <button class="btn" style="background: #18181b; border: 1px solid var(--border); margin-top: auto;" onclick="downloadFile()"><i data-lucide="download"></i> Download Source</button>
     </aside>
 
     <div class="workspace">
-        <div id="editor-wrapper"><textarea id="editor"></textarea></div>
-        <iframe id="preview" title="Live Preview"></iframe>
+        <textarea id="editor"></textarea>
+        <iframe id="preview"></iframe>
     </div>
 </div>
 
 <script>
     lucide.createIcons();
 
-    // Editor Initialization
     const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
         mode: "htmlmixed", theme: "dracula", lineNumbers: true, 
-        autoCloseTags: true, autoCloseBrackets: true, indentUnit: 4
+        autoCloseTags: true, autoCloseBrackets: true
     });
 
-    // Auto-load API Key from Browser Storage
     document.getElementById('api-key').value = localStorage.getItem('gemini_key') || '';
 
-    // GOOGLE AUTH FUNCTION
-    function handleSignIn(response) {
-        try {
-            const data = JSON.parse(atob(response.credential.split('.')[1]));
-            document.querySelector('.g_id_signin').style.display = 'none'; // Hide login button
-            const profile = document.getElementById('user-profile');
-            profile.style.display = 'flex'; // Show profile capsule
-            document.getElementById('u-name').innerText = data.given_name || data.name;
-            document.getElementById('u-img').src = data.picture;
-            console.log("Welcome,", data.name);
-        } catch(e) { console.error("Auth Decode Error:", e); }
+    // Toggle Key Visibility
+    function toggleKey() {
+        const keyInput = document.getElementById('api-key');
+        const eyeIcon = document.getElementById('eye-icon');
+        if (keyInput.type === "password") {
+            keyInput.type = "text";
+            eyeIcon.setAttribute("data-lucide", "eye-off");
+        } else {
+            keyInput.type = "password";
+            eyeIcon.setAttribute("data-lucide", "eye");
+        }
+        lucide.createIcons();
     }
 
-    // GEMINI AI FUNCTION
+    function handleSignIn(response) {
+        const data = JSON.parse(atob(response.credential.split('.')[1]));
+        document.querySelector('.g_id_signin').style.display = 'none';
+        document.getElementById('user-profile').style.display = 'flex';
+        document.getElementById('u-name').innerText = data.given_name;
+        document.getElementById('u-img').src = data.picture;
+    }
+
     async function generateCode() {
         const key = document.getElementById('api-key').value.trim();
         const prompt = document.getElementById('ai-prompt').value;
         const status = document.getElementById('status');
 
-        if (!key || !prompt) {
-            alert("Please enter your API Key and a Prompt!");
-            return;
-        }
-        
+        if (!key || !prompt) return alert("Missing Key or Prompt!");
         localStorage.setItem('gemini_key', key);
-        status.innerText = "Lumina AI is thinking... ✨";
+        status.innerText = "Lumina AI is connecting... ✨";
         status.style.color = "#8b5cf6";
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            // Reverting to v1beta for better compatibility with 1.5-flash keys
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: `Task: Create a fully functional single-file HTML/CSS/JS solution for: ${prompt}. Rules: 1. Return ONLY the code. 2. No markdown backticks. 3. No intro or outro.` }] }]
+                    contents: [{ parts: [{ text: `Generate ONLY single-file HTML/CSS/JS code for: ${prompt}. No markdown, no intro.` }] }]
                 })
             });
 
             const result = await response.json();
-
-            if (result.error) {
-                status.innerText = "Error: " + result.error.message;
-                status.style.color = "#ef4444";
-                return;
-            }
+            if (result.error) throw new Error(result.error.message);
 
             let code = result.candidates[0].content.parts[0].text;
-            // Double-check cleaning
             code = code.replace(/```html|```javascript|```css|```/gi, "").trim();
             
             editor.setValue(code);
             updatePreview();
-            status.innerText = "Success! Code generated. ✅";
+            status.innerText = "Generation Successful! ✅";
             status.style.color = "#10b981";
-
         } catch (e) {
-            status.innerText = "Connection Failed. Check your Internet.";
+            status.innerText = "Error: " + e.message;
             status.style.color = "#ef4444";
         }
     }
 
     function downloadFile() {
-        const code = editor.getValue();
-        const title = document.getElementById('project-title').value.replace(/\s+/g, '-') || "Project";
-        const blob = new Blob([code], { type: "text/html" });
+        const blob = new Blob([editor.getValue()], { type: "text/html" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = title + ".html";
+        a.download = (document.getElementById('project-title').value || "Project") + ".html";
         a.click();
     }
 
@@ -204,7 +193,6 @@
         const doc = document.getElementById('preview').contentWindow.document;
         doc.open(); doc.write(editor.getValue()); doc.close();
     }
-
     editor.on('change', () => updatePreview());
 </script>
 </body>
