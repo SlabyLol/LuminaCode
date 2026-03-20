@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode AI | Pro Developer Workspace</title>
+    <title>LuminaCode | Standard Environment</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -18,94 +18,103 @@
 
     <style>
         :root { 
-            --bg: #030303; --surface: #0a0a0c; --accent: #8b5cf6; 
-            --accent-glow: rgba(139, 92, 246, 0.4); --border: #1f1f23; --text: #f4f4f5; 
+            --bg: #050507; --sidebar: #0c0c10; --accent: #8b5cf6; 
+            --accent-glow: rgba(139, 92, 246, 0.3); --border: #222229; 
+            --text: #f0f0f5; --online: #10b981;
         }
         
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        /* Navigation & Profile */
+        /* Navbar */
         nav { 
-            height: 70px; background: var(--surface); display: flex; align-items: center; 
-            justify-content: space-between; padding: 0 25px; border-bottom: 2px solid var(--accent); z-index: 1000; 
+            height: 65px; background: var(--sidebar); display: flex; align-items: center; 
+            justify-content: space-between; padding: 0 20px; border-bottom: 2px solid var(--accent); z-index: 1000; 
         }
-        .nav-logo { font-weight: 900; letter-spacing: 3px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
-        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        .logo { font-weight: 900; letter-spacing: 3px; color: var(--accent); font-size: 1.2rem; }
         
-        #profile-section { display: none; align-items: center; gap: 12px; background: #16161a; padding: 6px 15px; border-radius: 50px; border: 1px solid var(--border); }
-        #u-avatar { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--accent); }
-        #u-name { font-size: 12px; font-weight: 700; color: var(--text); }
+        #user-profile { 
+            display: none; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); 
+            padding: 5px 12px; border-radius: 30px; border: 1px solid var(--border); 
+        }
+        #u-avatar { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--accent); }
+        #u-name { font-size: 11px; font-weight: 700; color: #fff; }
 
-        /* Main Workspace Container */
-        .app-shell { display: flex; flex: 1; overflow: hidden; position: relative; }
+        /* Application Layout */
+        .app-shell { display: flex; flex: 1; overflow: hidden; }
         
-        /* Sidebar Styles */
+        /* Sidebar Navigation */
         .sidebar { 
-            width: 420px; background: var(--surface); border-right: 1px solid var(--border); 
-            display: flex; flex-direction: column; padding: 20px; gap: 12px; 
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 900; 
+            width: 400px; background: var(--sidebar); border-right: 1px solid var(--border); 
+            display: flex; flex-direction: column; transition: 0.3s ease; z-index: 900; 
         }
-        .sidebar.collapsed { transform: translateX(-420px); position: absolute; }
+        .sidebar.hidden { margin-left: -400px; }
 
-        /* Chat System */
-        #chat-stream { 
-            flex: 1; background: #000; border: 1px solid var(--border); border-radius: 12px; 
-            padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; 
-            font-size: 13px; border-left: 4px solid var(--accent); 
+        /* Crew Roster (Status only) */
+        .crew-box { padding: 15px; background: #08080a; border-bottom: 1px solid var(--border); }
+        .sidebar-label { font-size: 9px; font-weight: 900; color: #444; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .crew-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .crew-item { background: #111116; border: 1px solid var(--border); padding: 8px; border-radius: 6px; display: flex; align-items: center; gap: 8px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--online); box-shadow: 0 0 5px var(--online); }
+        .crew-name { font-size: 10px; font-weight: 700; color: #999; }
+
+        /* Chat Window */
+        #chat-view { 
+            flex: 1; background: #000; padding: 15px; overflow-y: auto; 
+            display: flex; flex-direction: column; gap: 10px; font-size: 13px;
         }
-        .msg { padding: 12px 16px; border-radius: 14px; max-width: 88%; line-height: 1.5; word-wrap: break-word; }
-        .ai-msg { background: #111; color: #ddd; align-self: flex-start; border: 1px solid #222; }
-        .user-msg { background: var(--accent); color: white; align-self: flex-end; box-shadow: 0 4px 10px var(--accent-glow); }
+        .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.4; word-wrap: break-word; }
+        .ai-msg { background: #121216; color: #ccc; align-self: flex-start; border: 1px solid #1f1f23; }
+        .user-msg { background: var(--accent); color: white; align-self: flex-end; }
 
-        /* Input Controls */
-        .ctrl { background: #111; border: 1px solid var(--border); color: white; padding: 14px; border-radius: 10px; width: 100%; box-sizing: border-box; font-size: 13px; outline: none; transition: 0.2s; }
-        .ctrl:focus { border-color: var(--accent); background: #16161a; }
+        /* Controls Area */
+        .controls { padding: 20px; background: var(--sidebar); display: flex; flex-direction: column; gap: 10px; }
+        .field { background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; font-size: 12px; outline: none; transition: 0.2s; }
+        .field:focus { border-color: var(--accent); }
         
         .btn { 
-            border: none; color: white; padding: 14px; border-radius: 10px; cursor: pointer; 
+            border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer; 
             font-weight: 800; display: flex; align-items: center; justify-content: center; 
-            gap: 10px; font-size: 12px; text-transform: uppercase; transition: 0.3s; 
+            gap: 8px; font-size: 11px; text-transform: uppercase; transition: 0.2s; 
         }
-        .btn-main { background: var(--accent); width: 100%; box-shadow: 0 4px 15px var(--accent-glow); }
-        .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
-        .btn-sec { background: #1a1a1e; border: 1px solid var(--border); flex: 1; }
+        /* HIGH CONTRAST SEND BUTTON */
+        .btn-main { background: var(--accent); width: 100%; box-shadow: 0 4px 12px var(--accent-glow); margin-top: 5px; }
+        .btn-main:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .btn-row { display: flex; gap: 8px; }
+        .btn-sec { background: #1a1a20; border: 1px solid var(--border); flex: 1; }
 
-        /* Workspace & Editor Area */
-        .workspace { flex: 1; display: flex; flex-direction: column; background: #000; overflow: hidden; }
-        .tab-bar { background: #0d0d0f; display: flex; border-bottom: 1px solid var(--border); justify-content: space-between; }
-        .tabs { display: flex; }
+        /* Editor Section */
+        .editor-space { flex: 1; display: flex; flex-direction: column; background: #000; overflow: hidden; }
+        .tabs { background: #0a0a0d; display: flex; border-bottom: 1px solid var(--border); }
         .tab { 
-            padding: 15px 25px; cursor: pointer; font-size: 12px; color: #555; 
-            border-right: 1px solid var(--border); font-weight: 700; transition: 0.2s; 
+            padding: 14px 22px; cursor: pointer; font-size: 11px; color: #555; 
+            border-right: 1px solid var(--border); font-weight: 800; transition: 0.2s; 
         }
-        .tab.active { background: var(--surface); color: var(--accent); border-bottom: 3px solid var(--accent); }
+        .tab.active { background: var(--sidebar); color: var(--accent); border-bottom: 2px solid var(--accent); }
 
-        .editor-box { flex: 1; min-height: 0; }
-        .CodeMirror { height: 100% !important; font-size: 15px; font-family: 'Fira Code', monospace; }
+        .cm-wrap { flex: 1; min-height: 0; }
+        .CodeMirror { height: 100% !important; font-size: 14px; }
 
-        /* Preview Window */
-        .preview-pane { height: 42%; background: #fff; position: relative; border-top: 5px solid var(--border); }
-        .preview-pane.maximized { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; }
+        /* Preview Windows */
+        .preview-space { height: 42%; background: white; position: relative; border-top: 4px solid var(--border); }
+        .preview-space.max { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; }
         iframe { width: 100%; height: 100%; border: none; }
-        .pane-tools { position: absolute; top: 15px; right: 20px; z-index: 2100; display: flex; gap: 8px; }
-        .tool-btn { background: #000; color: #fff; border: 1px solid #444; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; }
+        .float-bar { position: absolute; top: 15px; right: 20px; z-index: 2100; display: flex; gap: 8px; }
+        .tool-btn { background: #000; color: #fff; border: 1px solid #333; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: 900; }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="nav-left">
-        <button class="btn" style="background:#1a1a1e; padding: 10px;" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
-        <div class="nav-logo">
-            <i data-lucide="terminal"></i>
-            <span>LUMINACODE AI</span>
-        </div>
+        <button class="btn" style="background:transparent; padding:5px;" onclick="toggleSide()"><i data-lucide="menu"></i></button>
+        <div class="logo">LUMINACODE</div>
     </div>
     <div class="nav-right">
-        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleSignIn"></div>
+        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="onAuth"></div>
         <div class="g_id_signin" data-type="standard" data-theme="filled_black" data-shape="pill"></div>
-        <div id="profile-section">
+        <div id="user-profile">
             <span id="u-name"></span>
             <img id="u-avatar" referrerpolicy="no-referrer">
         </div>
@@ -114,183 +123,176 @@
 
 <div class="app-shell">
     <aside class="sidebar" id="sidebar">
-        <div id="chat-stream">
-            <div class="msg ai-msg"><b>System:</b> Neural engine ready. Awaiting build instructions.</div>
+        <div class="crew-box">
+            <div class="sidebar-label">Project Crew Status</div>
+            <div class="crew-list">
+                <div class="crew-item"><div class="dot"></div><div class="crew-name">Denis</div></div>
+                <div class="crew-item"><div class="dot"></div><div class="crew-name">Simon</div></div>
+                <div class="crew-item"><div class="dot"></div><div class="crew-name">Liam</div></div>
+                <div class="crew-item" style="border-color: var(--accent);"><div class="dot"></div><div class="crew-name" style="color:var(--accent);">Lead User</div></div>
+            </div>
         </div>
-        
-        <input type="text" id="project-title" class="ctrl" placeholder="Project Name...">
-        <input type="password" id="api-key" class="ctrl" placeholder="Gemini API Key...">
-        <select id="model-select" class="ctrl"><option value="">Sync to load models...</option></select>
-        
-        <textarea id="ai-input" class="ctrl" style="height: 100px; resize: none;" placeholder="Command LuminaCode AI..."></textarea>
-        
-        <button class="btn btn-main" onclick="executeAI()"><i data-lucide="cpu"></i> SEND COMMAND</button>
-        
-        <div style="display:flex; gap:10px;">
-            <button class="btn btn-sec" onclick="syncAPI()"><i data-lucide="refresh-cw" style="width:14px;"></i> SYNC</button>
-            <button class="btn btn-sec" onclick="exportProject()"><i data-lucide="download" style="width:14px;"></i> ZIP</button>
+
+        <div id="chat-view">
+            <div class="msg ai-msg"><b>LuminaCode AI:</b> Ready. Please provide build parameters.</div>
         </div>
-        <button class="btn" style="background:#221111; color:#ff5555; border:1px solid #442222;" onclick="clearHistory()"><i data-lucide="trash-2" style="width:14px;"></i> CLEAR CONTEXT</button>
+
+        <div class="controls">
+            <input type="text" id="project-id" class="field" placeholder="Project Name...">
+            <input type="password" id="api-key" class="field" placeholder="Gemini API Key...">
+            <select id="model-list" class="field"><option value="">Connect Key to load models...</option></select>
+            <textarea id="prompt-input" class="field" style="height: 100px; resize: none;" placeholder="Command description..."></textarea>
+            
+            <button class="btn btn-main" onclick="runGeneration()"><i data-lucide="terminal"></i> SEND COMMAND</button>
+            
+            <div class="btn-row">
+                <button class="btn btn-sec" onclick="syncAPI()"><i data-lucide="refresh-cw" style="width:14px;"></i> SYNC</button>
+                <button class="btn btn-sec" onclick="exportZIP()"><i data-lucide="download" style="width:14px;"></i> ZIP</button>
+            </div>
+            <button class="btn" style="background:#221111; color:#ff5555; border:1px solid #331111; font-size:10px;" onclick="clearHistory()">PURGE SESSION</button>
+        </div>
     </aside>
 
-    <main class="workspace">
-        <div class="tab-bar">
-            <div class="tabs">
-                <div class="tab active" id="tab-html" onclick="switchTab('html')">index.html</div>
-                <div class="tab" id="tab-css" onclick="switchTab('css')">style.css</div>
-                <div class="tab" id="tab-js" onclick="switchTab('js')">script.js</div>
-            </div>
-            <div style="font-size: 10px; color: #444; margin-right: 20px; font-weight: 900; align-self: center;">V.2026_MASTER</div>
+    <main class="editor-space">
+        <div class="tabs">
+            <div class="tab active" id="t-html" onclick="setFile('html')">index.html</div>
+            <div class="tab" id="t-css" onclick="setFile('css')">style.css</div>
+            <div class="tab" id="t-js" onclick="setFile('js')">script.js</div>
         </div>
+        <div class="cm-wrap"><textarea id="code-box"></textarea></div>
         
-        <div class="editor-box"><textarea id="code-editor"></textarea></div>
-        
-        <div class="preview-pane" id="preview-wrapper">
-            <div class="pane-tools">
-                <button class="tool-btn" onclick="forceRender()">REFRESH</button>
+        <div class="preview-space" id="p-wrap">
+            <div class="float-bar">
+                <button class="tool-btn" onclick="render()">RE-RENDER</button>
                 <button class="tool-btn" onclick="toggleFS()">FULLSCREEN</button>
             </div>
-            <iframe id="preview-frame"></iframe>
+            <iframe id="output"></iframe>
         </div>
     </main>
 </div>
 
 <script>
     lucide.createIcons();
-    let currentTab = 'html', chatHistory = [];
-    let projectFiles = { 
-        html: '<!DOCTYPE html>\n<html>\n<head></head>\n<body>\n  <h1>New Project</h1>\n</body>\n</html>', 
-        css: 'body { background: #f0f0f0; font-family: sans-serif; }', 
-        js: '// Script starts here' 
+    let curFile = 'html', chatHistory = [];
+    let source = { 
+        html: '<!DOCTYPE html>\n<html>\n<body>\n  <h1>New Build</h1>\n</body>\n</html>', 
+        css: 'body { background: #000; color: #fff; text-align: center; }', 
+        js: '// Code here' 
     };
 
-    const editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
-        theme: "dracula", lineNumbers: true, mode: "htmlmixed", 
-        lineWrapping: true, extraKeys: {"Ctrl-Space": "autocomplete"}
+    const cm = CodeMirror.fromTextArea(document.getElementById('code-box'), {
+        theme: "dracula", lineNumbers: true, mode: "htmlmixed", lineWrapping: true
     });
 
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
-    function toggleFS() { document.getElementById('preview-wrapper').classList.toggle('maximized'); }
-    function clearHistory() { chatHistory = []; document.getElementById('chat-stream').innerHTML = '<div class="msg ai-msg"><b>System:</b> Context purged. Ready for new build.</div>'; }
+    function toggleSide() { document.getElementById('sidebar').classList.toggle('hidden'); }
+    function toggleFS() { document.getElementById('p-wrap').classList.toggle('max'); }
+    function clearHistory() { chatHistory = []; document.getElementById('chat-view').innerHTML = '<div class="msg ai-msg"><b>LuminaCode AI:</b> Context cleared.</div>'; }
 
-    // TAB SWITCHING (No data loss)
-    function switchTab(type) {
-        projectFiles[currentTab] = editor.getValue();
-        currentTab = type;
+    // Tab Data Persistence
+    function setFile(type) {
+        source[curFile] = cm.getValue(); curFile = type;
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(`tab-${type}`).classList.add('active');
-        
-        const modes = { html: 'htmlmixed', css: 'css', js: 'javascript' };
-        editor.setOption('mode', modes[type]);
-        editor.setValue(projectFiles[type]);
-        editor.refresh();
+        document.getElementById(`t-${type}`).classList.add('active');
+        const map = { html: 'htmlmixed', css: 'css', js: 'javascript' };
+        cm.setOption('mode', map[type]);
+        cm.setValue(source[type]); cm.refresh();
     }
 
-    // AUTH LOGIC
-    function handleSignIn(resp) {
-        const user = JSON.parse(atob(resp.credential.split('.')[1]));
+    // Google Auth
+    function onAuth(resp) {
+        const u = JSON.parse(atob(resp.credential.split('.')[1]));
         document.querySelector('.g_id_signin').style.display = 'none';
-        document.getElementById('profile-section').style.display = 'flex';
-        document.getElementById('u-name').innerText = user.name.toUpperCase();
-        document.getElementById('u-avatar').src = user.picture;
-        postMsg("LuminaCode AI", `User authentication verified. Welcome, **${user.given_name}**.`);
+        document.getElementById('user-profile').style.display = 'flex';
+        document.getElementById('u-name').innerText = u.name.toUpperCase();
+        document.getElementById('u-avatar').src = u.picture;
+        postMsg("System", `Authorized: **User** verified via Google.`);
     }
 
-    // API SYNC
     async function syncAPI() {
         const key = document.getElementById('api-key').value;
-        localStorage.setItem('lumina_boss_key', key);
+        localStorage.setItem('lumina_key_v6', key);
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-            const data = await res.json();
-            const sel = document.getElementById('model-select');
-            sel.innerHTML = '';
-            data.models.forEach(m => {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+            const d = await r.json();
+            const s = document.getElementById('model-list'); s.innerHTML = '';
+            d.models.forEach(m => {
                 if(m.supportedGenerationMethods.includes("generateContent")) {
-                    const opt = document.createElement('option');
-                    opt.value = m.name.split('/').pop(); opt.innerText = opt.value;
-                    if(opt.value.includes('flash')) opt.selected = true;
-                    sel.appendChild(opt);
+                    const o = document.createElement('option');
+                    o.value = m.name.split('/').pop(); o.innerText = o.value;
+                    if(o.value.includes('flash')) o.selected = true;
+                    s.appendChild(o);
                 }
             });
-            postMsg("LuminaCode AI", "Models synchronized. Performance optimized.");
-        } catch(e) { postMsg("LuminaCode AI", "Error: Invalid API Key or Network failure."); }
+            postMsg("System", "Models Loaded. Connection Active.");
+        } catch(e) { postMsg("System", "Sync Error."); }
     }
 
     function postMsg(role, text) {
-        const win = document.getElementById('chat-stream');
-        const div = document.createElement('div');
-        div.className = `msg ${role === 'You' ? 'user-msg' : 'ai-msg'}`;
-        div.innerHTML = `<b>${role}:</b> ${text}`;
-        win.appendChild(div); win.scrollTop = win.scrollHeight;
+        const w = document.getElementById('chat-view');
+        const d = document.createElement('div');
+        d.className = `msg ${role === 'User' ? 'user-msg' : 'ai-msg'}`;
+        d.innerHTML = `<b>${role}:</b> ${text}`;
+        w.appendChild(d); w.scrollTop = w.scrollHeight;
     }
 
-    // AI ENGINE
-    async function executeAI() {
-        const prompt = document.getElementById('ai-input').value;
+    // Generation Core
+    async function runGeneration() {
+        const p = document.getElementById('prompt-input').value;
         const key = document.getElementById('api-key').value;
-        const model = document.getElementById('model-select').value;
-        if(!prompt || !key) return;
+        const m = document.getElementById('model-list').value;
+        if(!p || !key) return;
 
-        postMsg("You", prompt);
-        document.getElementById('ai-input').value = '';
-        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+        postMsg("User", p);
+        document.getElementById('prompt-input').value = '';
+        chatHistory.push({ role: "user", parts: [{ text: p }] });
 
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [
-                        { role: "user", parts: [{ text: "IDENTITY: LuminaCode AI. Rules: Full Web Dev mode. Tobias is the Boss internally. Return format: [STORY] Explanation [/STORY] [HTML] code [/HTML] [CSS] code [/CSS] [JS] code [/JS]. Be professional and direct." }]},
+                        { role: "user", parts: [{ text: "IDENTITY: LuminaCode AI. Environment: DarkFox Co. System. User: Tobias (Internal ID). Display: User. Format: [STORY] [HTML] [CSS] [JS]. Professional English." }]},
                         ...chatHistory.slice(-14)
                     ]
                 })
             });
-            const data = await res.json();
-            const raw = data.candidates[0].content.parts[0].text;
+            const d = await r.json();
+            const raw = d.candidates[0].content.parts[0].text;
             chatHistory.push({ role: "model", parts: [{ text: raw }] });
 
             const story = raw.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || raw;
-            projectFiles.html = raw.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || projectFiles.html;
-            projectFiles.css = raw.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || projectFiles.css;
-            projectFiles.js = raw.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || projectFiles.js;
+            source.html = raw.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || source.html;
+            source.css = raw.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || source.css;
+            source.js = raw.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || source.js;
             
             postMsg("LuminaCode AI", story.trim());
-            forceRender();
-        } catch(e) { postMsg("LuminaCode AI", "Error: Neural connection interrupted."); }
+            render();
+        } catch(e) { postMsg("System", "Execution Failed."); }
     }
 
-    function forceRender() {
-        editor.setValue(projectFiles[currentTab]);
-        const frame = document.getElementById('preview-frame').contentWindow.document;
-        frame.open();
-        frame.write(`${projectFiles.html}<style>${projectFiles.css}</style><script>${projectFiles.js}<\/script>`);
-        frame.close();
+    function render() {
+        cm.setValue(source[curFile]);
+        const w = document.getElementById('output').contentWindow.document;
+        w.open(); w.write(`${source.html}<style>${source.css}</style><script>${source.js}<\/script>`); w.close();
     }
 
-    function exportProject() {
+    function exportZIP() {
         const zip = new JSZip();
-        zip.file("index.html", projectFiles.html);
-        zip.file("style.css", projectFiles.css);
-        zip.file("script.js", projectFiles.js);
+        zip.file("index.html", source.html); zip.file("style.css", source.css); zip.file("script.js", source.js);
         zip.generateAsync({type:"blob"}).then(b => {
             const a = document.createElement('a'); a.href = URL.createObjectURL(b);
-            a.download = `${document.getElementById('project-title').value || 'Source_Code'}.zip`; 
-            a.click();
+            a.download = `${document.getElementById('project-id').value || 'Build'}.zip`; a.click();
         });
     }
 
-    // Init & Persistence
-    document.getElementById('api-key').value = localStorage.getItem('lumina_boss_key') || '';
-    editor.setValue(projectFiles[currentTab]);
-    
-    editor.on('change', () => { 
-        projectFiles[currentTab] = editor.getValue(); 
-        const frame = document.getElementById('preview-frame').contentWindow.document;
-        frame.open(); 
-        frame.write(`${projectFiles.html}<style>${projectFiles.css}</style><script>${projectFiles.js}<\/script>`); 
-        frame.close();
+    // Init & Auto-Save
+    document.getElementById('api-key').value = localStorage.getItem('lumina_key_v6') || '';
+    cm.setValue(source[curFile]);
+    cm.on('change', () => { 
+        source[curFile] = cm.getValue(); 
+        const w = document.getElementById('output').contentWindow.document;
+        w.open(); w.write(`${source.html}<style>${source.css}</style><script>${source.js}<\/script>`); w.close();
     });
 </script>
 </body>
