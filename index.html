@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode AI </title>
+    <title>LuminaCode AI | Master Workspace</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -20,48 +20,48 @@
         :root { --bg: #050505; --surface: #0f0f12; --accent: #8b5cf6; --border: #27272a; --text: #fafafa; }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        /* Navbar & Profile Position */
+        /* Navbar */
         nav { height: 70px; background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 2px solid var(--accent); z-index: 1000; flex-shrink: 0; }
-        .nav-left { display: flex; align-items: center; gap: 15px; }
-        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 15px; }
         
-        #user-profile { display: none; align-items: center; gap: 12px; background: rgba(139, 92, 246, 0.2); padding: 6px 15px; border-radius: 40px; border: 1px solid var(--accent); transition: 0.3s; }
-        #u-img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid white; }
-        #u-name { font-size: 13px; font-weight: 800; color: #fff; }
+        /* Profile Section */
+        #user-profile { display: none; align-items: center; gap: 12px; background: rgba(139, 92, 246, 0.15); padding: 6px 16px; border-radius: 30px; border: 1px solid var(--accent); }
+        #u-avatar { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--accent); }
+        #u-name { font-size: 13px; font-weight: 800; }
 
-        /* Layout */
+        /* App Layout */
         .main-layout { display: flex; flex: 1; overflow: hidden; position: relative; }
-        .sidebar { width: 420px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 18px; gap: 12px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 900; }
+        .sidebar { width: 420px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 18px; gap: 12px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 900; }
         .sidebar.closed { margin-left: -420px; }
 
         /* Chat System */
         #chat-window { flex: 1; background: #070708; border: 1px solid var(--border); border-radius: 12px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-size: 13px; border-left: 4px solid var(--accent); }
-        .msg { padding: 12px 16px; border-radius: 14px; max-width: 92%; word-wrap: break-word; line-height: 1.5; position: relative; }
-        .ai-msg { align-self: flex-start; background: #1a1a1e; color: #eee; border: 1px solid #333; }
-        .user-msg { align-self: flex-end; background: var(--accent); color: white; font-weight: 500; }
+        .msg { padding: 12px 16px; border-radius: 14px; max-width: 88%; word-wrap: break-word; line-height: 1.5; }
+        .ai-msg { background: #1a1a1e; color: #ddd; align-self: flex-start; border: 1px solid #333; }
+        .user-msg { background: var(--accent); color: white; align-self: flex-end; font-weight: 500; }
 
         .field { background: #16161a; border: 1px solid var(--border); color: white; padding: 14px; border-radius: 10px; width: 100%; box-sizing: border-box; font-size: 13px; outline: none; transition: 0.2s; }
         .field:focus { border-color: var(--accent); }
         
-        .btn { border: none; color: white; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px; text-transform: uppercase; transition: 0.3s; }
-        .btn-send { background: var(--accent); width: 100%; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
-        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
+        .btn { border: none; color: white; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 11px; text-transform: uppercase; transition: 0.3s; }
+        .btn-main { background: var(--accent); width: 100%; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
+        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); }
 
-        /* Workspace */
+        /* Workspace & Tabs */
         .workspace { flex: 1; display: flex; flex-direction: column; background: #000; overflow: hidden; }
-        .tab-bar { background: #111; display: flex; border-bottom: 1px solid var(--border); justify-content: space-between; align-items: center; }
+        .tab-bar { background: #0d0d0f; display: flex; border-bottom: 1px solid var(--border); justify-content: space-between; align-items: center; }
         .tabs { display: flex; }
-        .tab { padding: 14px 22px; cursor: pointer; font-size: 12px; color: #555; border-right: 1px solid var(--border); font-weight: 600; }
+        .tab { padding: 15px 25px; cursor: pointer; font-size: 12px; color: #555; border-right: 1px solid var(--border); font-weight: 700; transition: 0.2s; }
         .tab.active { background: var(--surface); color: var(--accent); border-bottom: 3px solid var(--accent); }
 
         .editor-container { flex: 1; min-height: 0; }
         .CodeMirror { height: 100% !important; font-size: 15px; }
 
-        /* Preview Window */
-        .preview-area { height: 42%; background: white; position: relative; border-top: 5px solid var(--border); }
-        .preview-area.fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; }
+        /* Live Preview Window */
+        .preview-pane { height: 42%; background: white; position: relative; border-top: 5px solid var(--border); }
+        .preview-pane.maximized { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; }
         iframe { width: 100%; height: 100%; border: none; }
-        .fs-btn { position: absolute; top: 15px; right: 15px; z-index: 2100; background: #000; color: #fff; border: 1px solid #555; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .fs-btn { position: absolute; top: 15px; right: 15px; z-index: 2100; background: #000; color: #fff; border: 1px solid #444; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -76,7 +76,7 @@
         <div class="g_id_signin" data-type="standard" data-theme="filled_black" data-shape="pill"></div>
         <div id="user-profile">
             <span id="u-name"></span>
-            <img id="u-img" referrerpolicy="no-referrer">
+            <img id="u-avatar" referrerpolicy="no-referrer">
         </div>
     </div>
 </nav>
@@ -84,35 +84,32 @@
 <div class="main-layout">
     <aside class="sidebar" id="sidebar">
         <div id="chat-window">
-            <div class="msg ai-msg"><b>LuminaCode AI:</b> System Online. Waiting for order...⚡</div>
+            <div class="msg ai-msg"><b>LuminaCode AI:</b> System Online. Prepared to build.</div>
         </div>
-        
-        <input type="text" id="p-name" class="field" placeholder="Project Name (e.g. DarkFox App)...">
+        <input type="text" id="proj-name" class="field" placeholder="Project Name (e.g. DarkFox Elite)...">
         <input type="password" id="api-key" class="field" placeholder="Gemini API Key...">
-        <select id="model-select" class="field"><option value="">Sync Models to start...</option></select>
-        <textarea id="ai-prompt" class="field" style="height: 100px; resize:none;" placeholder="Talk to me or give a build order..."></textarea>
+        <select id="model-select" class="field"><option value="">Sync API to load Models...</option></select>
+        <textarea id="ai-prompt" class="field" style="height: 100px; resize:none;" placeholder="Describe what you want to build..."></textarea>
         
-        <button class="btn btn-send" onclick="askAI()"><i data-lucide="zap"></i> SEND COMMAND</button>
-        
-        <div style="display:flex; gap:8px;">
+        <button class="btn btn-main" onclick="askAI()"><i data-lucide="zap"></i> EXECUTE BUILD</button>
+        <div style="display:flex; gap:10px;">
             <button class="btn" style="background:#111; border:1px solid #333; flex:1;" onclick="syncModels()">SYNC API</button>
-            <button class="btn" style="background:var(--accent); flex:1;" onclick="executeCode()">RUN CODE</button>
+            <button class="btn" style="background:#111; border:1px solid #333; flex:1;" onclick="downloadZip()">EXPORT .ZIP</button>
         </div>
-        <button class="btn" style="background:#000; border:1px solid #444;" onclick="downloadZip()">EXPORT AS .ZIP</button>
     </aside>
 
     <div class="workspace">
         <div class="tab-bar">
             <div class="tabs">
-                <div class="tab active" id="tab-html" onclick="switchTab('html')">index.html</div>
-                <div class="tab" id="tab-css" onclick="switchTab('css')">style.css</div>
-                <div class="tab" id="tab-js" onclick="switchTab('js')">script.js</div>
+                <div class="tab active" id="tab-html" onclick="switchFile('html')">index.html</div>
+                <div class="tab" id="tab-css" onclick="switchFile('css')">style.css</div>
+                <div class="tab" id="tab-js" onclick="switchFile('js')">script.js</div>
             </div>
-            <div style="font-size: 10px; color: #444; margin-right: 20px; font-weight: 900; letter-spacing: 1px;">DARKFOX CO. WORKSPACE</div>
+            <div style="font-size: 10px; color: #444; margin-right: 25px; font-weight: 900; letter-spacing: 1px;">DARKFOX CO. ENGINE</div>
         </div>
         <div class="editor-container"><textarea id="editor"></textarea></div>
-        <div class="preview-area" id="preview-wrapper">
-            <button class="fs-btn" onclick="toggleFS()"><i data-lucide="maximize-2"></i> FULLSCREEN</button>
+        <div class="preview-pane" id="preview-wrapper">
+            <button class="fs-btn" onclick="toggleFS()">FULLSCREEN</button>
             <iframe id="preview"></iframe>
         </div>
     </div>
@@ -120,38 +117,40 @@
 
 <script>
     lucide.createIcons();
-    let currentTab = 'html', chatHistory = [], lastData = { html: '', css: '', js: '' };
+    let currentFile = 'html', chatHistory = [];
+    let project = { html: '', css: '', js: '' };
+
     const cm = CodeMirror.fromTextArea(document.getElementById('editor'), {
         theme: "dracula", lineNumbers: true, mode: "htmlmixed", lineWrapping: true
     });
 
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('closed'); }
-    function toggleFS() { document.getElementById('preview-wrapper').classList.toggle('fullscreen'); }
+    function toggleFS() { document.getElementById('preview-wrapper').classList.toggle('maximized'); }
 
-    function switchTab(type) {
-        lastData[currentTab] = cm.getValue();
-        currentTab = type;
+    function switchFile(type) {
+        project[currentFile] = cm.getValue();
+        currentFile = type;
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById(`tab-${type}`).classList.add('active');
         const modes = { html: 'htmlmixed', css: 'css', js: 'javascript' };
         cm.setOption('mode', modes[type]);
-        cm.setValue(lastData[type] || '');
+        cm.setValue(project[type] || '');
         cm.refresh();
     }
 
     function handleSignIn(resp) {
-        const data = JSON.parse(atob(resp.credential.split('.')[1]));
+        const payload = JSON.parse(atob(resp.credential.split('.')[1]));
         document.querySelector('.g_id_signin').style.display = 'none';
         const profile = document.getElementById('user-profile');
         profile.style.display = 'flex';
-        document.getElementById('u-name').innerText = data.given_name.toUpperCase();
-        document.getElementById('u-img').src = data.picture;
-        addChatMsg("LuminaCode AI", `Access Granted. Profile synchronized: **${data.name}**.`);
+        document.getElementById('u-name').innerText = payload.name.toUpperCase();
+        document.getElementById('u-avatar').src = payload.picture;
+        addMsg("LuminaCode AI", `Access Granted. Profile: **${payload.name}** synchronized.`);
     }
 
     async function syncModels() {
         const key = document.getElementById('api-key').value;
-        localStorage.setItem('boss_key_v4', key);
+        localStorage.setItem('lumina_key_vfinal', key);
         try {
             const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
             const d = await r.json();
@@ -165,11 +164,11 @@
                     sel.appendChild(o);
                 }
             });
-            addChatMsg("LuminaCode AI", "API Sync complete. Models Loaded. Ready to build.");
-        } catch(e) { addChatMsg("LuminaCode AI", "Sync error. Check API Key."); }
+            addMsg("LuminaCode AI", "API Sync complete. Engine ready.");
+        } catch(e) { addMsg("LuminaCode AI", "Sync error. Check your API Key."); }
     }
 
-    function addChatMsg(role, text) {
+    function addMsg(role, text) {
         const win = document.getElementById('chat-window');
         const div = document.createElement('div');
         div.className = `msg ${role === 'User' ? 'user-msg' : 'ai-msg'}`;
@@ -178,14 +177,14 @@
     }
 
     async function askAI() {
-        const p = document.getElementById('ai-prompt').value;
+        const prompt = document.getElementById('ai-prompt').value;
         const key = document.getElementById('api-key').value;
         const model = document.getElementById('model-select').value;
-        if(!p || !key) return;
+        if(!prompt || !key) return;
 
-        addChatMsg("User", p);
+        addMsg("User", prompt);
         document.getElementById('ai-prompt').value = '';
-        chatHistory.push({ role: "user", parts: [{ text: p }] });
+        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
         try {
             const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
@@ -193,7 +192,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [
-                        { role: "user", parts: [{ text: "IDENTITY: LuminaCode AI. Boss: Tobias. Crew: DarkFox Co. (Denis, Simon, Liam). TASK: Act as a pro developer. If Tobias chats, answer intelligently as a peer. If he asks for code, use tags: [STORY], [HTML], [CSS], [JS]. Tobias is the best coder." }]},
+                        { role: "user", parts: [{ text: "IDENTITY: LuminaCode AI. Rules: Strictly web-dev. Format with [STORY], [HTML], [CSS], [JS] tags. Be professional. Tobias is the Boss internally, but remain neutral in output unless asked." }]},
                         ...chatHistory.slice(-12)
                     ]
                 })
@@ -203,37 +202,37 @@
             chatHistory.push({ role: "model", parts: [{ text: raw }] });
 
             const story = raw.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || raw;
-            lastData.html = raw.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || lastData.html;
-            lastData.css = raw.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || lastData.css;
-            lastData.js = raw.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || lastData.js;
+            project.html = raw.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || project.html;
+            project.css = raw.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || project.css;
+            project.js = raw.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || project.js;
             
-            addChatMsg("LuminaCode AI", story.trim());
-            executeCode();
-        } catch(e) { addChatMsg("LuminaCode AI", "Engine timeout. Check connection."); }
+            addMsg("LuminaCode AI", story.trim());
+            render();
+        } catch(e) { addMsg("LuminaCode AI", "Engine timeout."); }
     }
 
-    function executeCode() {
-        cm.setValue(lastData[currentTab]);
-        const doc = document.getElementById('preview').contentWindow.document;
-        doc.open();
-        doc.write(`${lastData.html}<style>${lastData.css}</style><script>${lastData.js}<\/script>`);
-        doc.close();
+    function render() {
+        cm.setValue(project[currentFile]);
+        const win = document.getElementById('preview').contentWindow.document;
+        win.open();
+        win.write(`${project.html}<style>${project.css}</style><script>${project.js}<\/script>`);
+        win.close();
     }
 
     function downloadZip() {
         const zip = new JSZip();
-        zip.file("index.html", lastData.html); zip.file("style.css", lastData.css); zip.file("script.js", lastData.js);
+        zip.file("index.html", project.html); zip.file("style.css", project.css); zip.file("script.js", project.js);
         zip.generateAsync({type:"blob"}).then(b => {
             const a = document.createElement('a'); a.href = URL.createObjectURL(b);
-            a.download = `${document.getElementById('p-name').value || 'DarkFox_Project'}.zip`; a.click();
+            a.download = `${document.getElementById('proj-name').value || 'Project'}.zip`; a.click();
         });
     }
 
-    document.getElementById('api-key').value = localStorage.getItem('boss_key_v4') || '';
+    document.getElementById('api-key').value = localStorage.getItem('lumina_key_vfinal') || '';
     cm.on('change', () => { 
-        lastData[currentTab] = cm.getValue(); 
-        const doc = document.getElementById('preview').contentWindow.document;
-        doc.open(); doc.write(`${lastData.html}<style>${lastData.css}</style><script>${lastData.js}<\/script>`); doc.close();
+        project[currentFile] = cm.getValue(); 
+        const win = document.getElementById('preview').contentWindow.document;
+        win.open(); win.write(`${project.html}<style>${project.css}</style><script>${project.js}<\/script>`); win.close();
     });
 </script>
 </body>
