@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaCode | Standard Environment</title>
+    <title>LuminaCode PRO</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -18,281 +18,274 @@
 
     <style>
         :root { 
-            --bg: #050507; --sidebar: #0c0c10; --accent: #8b5cf6; 
-            --accent-glow: rgba(139, 92, 246, 0.3); --border: #222229; 
-            --text: #f0f0f5; --online: #10b981;
+            --bg: #030305; --sidebar: #09090c; --accent: #8b5cf6; 
+            --border: #1a1a1f; --text: #f0f0f0; --glass: rgba(255, 255, 255, 0.03);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        /* Navbar */
-        nav { 
-            height: 65px; background: var(--sidebar); display: flex; align-items: center; 
-            justify-content: space-between; padding: 0 20px; border-bottom: 2px solid var(--accent); z-index: 1000; 
-        }
-        .nav-left { display: flex; align-items: center; gap: 15px; }
-        .logo { font-weight: 900; letter-spacing: 3px; color: var(--accent); font-size: 1.2rem; }
-        
-        #user-profile { 
-            display: none; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); 
-            padding: 5px 12px; border-radius: 30px; border: 1px solid var(--border); 
-        }
-        #u-avatar { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--accent); }
-        #u-name { font-size: 11px; font-weight: 700; color: #fff; }
+        /* Navigation */
+        nav { height: 60px; background: var(--sidebar); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 2px solid var(--accent); z-index: 1000; }
+        .logo-box { display: flex; align-items: center; gap: 12px; font-weight: 900; letter-spacing: 4px; color: var(--accent); }
+        .hidden { display: none !important; }
 
-        /* Application Layout */
         .app-shell { display: flex; flex: 1; overflow: hidden; }
         
-        /* Sidebar Navigation */
-        .sidebar { 
-            width: 400px; background: var(--sidebar); border-right: 1px solid var(--border); 
-            display: flex; flex-direction: column; transition: 0.3s ease; z-index: 900; 
-        }
-        .sidebar.hidden { margin-left: -400px; }
+        /* Sidebar Logic */
+        .sidebar { width: 380px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 900; }
+        .sidebar.collapsed { margin-left: -380px; }
 
-        /* Crew Roster (Status only) */
-        .crew-box { padding: 15px; background: #08080a; border-bottom: 1px solid var(--border); }
-        .sidebar-label { font-size: 9px; font-weight: 900; color: #444; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
-        .crew-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .crew-item { background: #111116; border: 1px solid var(--border); padding: 8px; border-radius: 6px; display: flex; align-items: center; gap: 8px; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--online); box-shadow: 0 0 5px var(--online); }
-        .crew-name { font-size: 10px; font-weight: 700; color: #999; }
+        /* Stealth Account System */
+        .identity-mgr { padding: 15px; border-bottom: 1px solid var(--border); background: #060608; }
+        .id-toggle { font-size: 10px; font-weight: 900; color: #333; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .id-toggle:hover { color: var(--accent); }
+        #id-content { margin-top: 12px; display: flex; align-items: center; gap: 12px; padding: 10px; background: #000; border-radius: 8px; border: 1px solid var(--border); }
+        #u-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--accent); box-shadow: 0 0 10px var(--accent); }
+        #u-name { font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
 
-        /* Chat Window */
-        #chat-view { 
-            flex: 1; background: #000; padding: 15px; overflow-y: auto; 
-            display: flex; flex-direction: column; gap: 10px; font-size: 13px;
-        }
-        .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.4; word-wrap: break-word; }
-        .ai-msg { background: #121216; color: #ccc; align-self: flex-start; border: 1px solid #1f1f23; }
-        .user-msg { background: var(--accent); color: white; align-self: flex-end; }
+        /* Chat Flow */
+        #chat-flow { flex: 1; background: #000; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; font-size: 13px; scroll-behavior: smooth; }
+        .msg { padding: 12px 16px; border-radius: 12px; max-width: 85%; line-height: 1.5; position: relative; }
+        .ai-msg { background: #0d0d12; color: #ccc; align-self: flex-start; border: 1px solid #1a1a22; border-left: 3px solid var(--accent); }
+        .user-msg { background: var(--accent); color: white; align-self: flex-end; font-weight: 500; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); }
 
-        /* Controls Area */
-        .controls { padding: 20px; background: var(--sidebar); display: flex; flex-direction: column; gap: 10px; }
-        .field { background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; font-size: 12px; outline: none; transition: 0.2s; }
-        .field:focus { border-color: var(--accent); }
+        /* Control Panel */
+        .controls { padding: 20px; background: var(--sidebar); display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--border); }
+        .input-field { background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; width: 100%; font-size: 12px; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--accent); background: #050507; }
         
-        .btn { 
-            border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer; 
-            font-weight: 800; display: flex; align-items: center; justify-content: center; 
-            gap: 8px; font-size: 11px; text-transform: uppercase; transition: 0.2s; 
-        }
-        /* HIGH CONTRAST SEND BUTTON */
-        .btn-main { background: var(--accent); width: 100%; box-shadow: 0 4px 12px var(--accent-glow); margin-top: 5px; }
-        .btn-main:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .btn { border: none; color: white; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 11px; text-transform: uppercase; transition: 0.2s; }
+        .btn-execute { background: linear-gradient(135deg, var(--accent), #6d28d9); width: 100%; letter-spacing: 1px; }
+        .btn-execute:hover { transform: translateY(-2px); filter: brightness(1.2); }
         .btn-row { display: flex; gap: 8px; }
-        .btn-sec { background: #1a1a20; border: 1px solid var(--border); flex: 1; }
+        .btn-sec { background: #16161c; border: 1px solid var(--border); flex: 1; }
+        .btn-sec:hover { background: #1f1f28; }
 
-        /* Editor Section */
-        .editor-space { flex: 1; display: flex; flex-direction: column; background: #000; overflow: hidden; }
-        .tabs { background: #0a0a0d; display: flex; border-bottom: 1px solid var(--border); }
-        .tab { 
-            padding: 14px 22px; cursor: pointer; font-size: 11px; color: #555; 
-            border-right: 1px solid var(--border); font-weight: 800; transition: 0.2s; 
-        }
+        /* Editor & Tabs */
+        .editor-space { flex: 1; display: flex; flex-direction: column; background: #000; }
+        .tab-bar { background: #07070a; display: flex; border-bottom: 1px solid var(--border); align-items: center; justify-content: space-between; }
+        .tabs { display: flex; }
+        .tab { padding: 15px 25px; cursor: pointer; font-size: 11px; color: #444; border-right: 1px solid var(--border); font-weight: 900; letter-spacing: 1px; transition: 0.2s; }
         .tab.active { background: var(--sidebar); color: var(--accent); border-bottom: 2px solid var(--accent); }
 
-        .cm-wrap { flex: 1; min-height: 0; }
-        .CodeMirror { height: 100% !important; font-size: 14px; }
+        .code-container { flex: 1; min-height: 0; }
+        .CodeMirror { height: 100% !important; font-size: 15px; font-family: 'Fira Code', monospace; }
 
-        /* Preview Windows */
-        .preview-space { height: 42%; background: white; position: relative; border-top: 4px solid var(--border); }
-        .preview-space.max { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; }
+        /* Live Preview System */
+        .preview-pane { height: 42%; background: white; position: relative; border-top: 5px solid var(--border); transition: 0.3s; }
+        .preview-pane.maximized { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; }
         iframe { width: 100%; height: 100%; border: none; }
-        .float-bar { position: absolute; top: 15px; right: 20px; z-index: 2100; display: flex; gap: 8px; }
-        .tool-btn { background: #000; color: #fff; border: 1px solid #333; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: 900; }
+        .pane-controls { position: absolute; top: 15px; right: 20px; z-index: 2100; display: flex; gap: 8px; }
+        .p-btn { background: rgba(0,0,0,0.8); color: #fff; border: 1px solid #444; padding: 8px 14px; border-radius: 5px; cursor: pointer; font-size: 10px; font-weight: 900; backdrop-filter: blur(5px); }
+        .p-btn:hover { background: #000; border-color: var(--accent); }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="nav-left">
-        <button class="btn" style="background:transparent; padding:5px;" onclick="toggleSide()"><i data-lucide="menu"></i></button>
-        <div class="logo">LUMINACODE</div>
+    <div class="logo-box">
+        <button class="btn" style="background:transparent; padding:0;" onclick="toggleSide()"><i data-lucide="menu"></i></button>
+        <i data-lucide="zap" style="fill: var(--accent);"></i>
+        <span>LUMINACODE</span>
     </div>
-    <div class="nav-right">
-        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="onAuth"></div>
-        <div class="g_id_signin" data-type="standard" data-theme="filled_black" data-shape="pill"></div>
-        <div id="user-profile">
-            <span id="u-name"></span>
-            <img id="u-avatar" referrerpolicy="no-referrer">
-        </div>
+    <div class="nav-actions">
+        <div id="g_id_onload" data-client_id="951427019725-o73a2mgth6qnd9bufkp6kjunn583u0k5.apps.googleusercontent.com" data-callback="handleAuth"></div>
+        <div class="g_id_signin" data-type="icon" data-shape="circle" data-theme="filled_black"></div>
     </div>
 </nav>
 
 <div class="app-shell">
     <aside class="sidebar" id="sidebar">
-        <div class="crew-box">
-            <div class="sidebar-label">Project Crew Status</div>
-            <div class="crew-list">
-                <div class="crew-item"><div class="dot"></div><div class="crew-name">Denis</div></div>
-                <div class="crew-item"><div class="dot"></div><div class="crew-name">Simon</div></div>
-                <div class="crew-item"><div class="dot"></div><div class="crew-name">Liam</div></div>
-                <div class="crew-item" style="border-color: var(--accent);"><div class="dot"></div><div class="crew-name" style="color:var(--accent);">Lead User</div></div>
+        <div class="identity-mgr">
+            <div class="id-toggle" onclick="toggleAcc()">
+                <span>System Identity</span>
+                <i data-lucide="chevron-down" id="id-icon" style="width:14px;"></i>
+            </div>
+            <div id="id-content" class="hidden">
+                <img id="u-avatar" src="" referrerpolicy="no-referrer" class="hidden">
+                <span id="u-name">GUEST_SESSION</span>
             </div>
         </div>
 
-        <div id="chat-view">
-            <div class="msg ai-msg"><b>LuminaCode AI:</b> Ready. Please provide build parameters.</div>
+        <div id="chat-flow">
+            <div class="msg ai-msg"><b>System:</b> LuminaCode Engine v6.0 Online. Standing by for User input.</div>
         </div>
 
         <div class="controls">
-            <input type="text" id="project-id" class="field" placeholder="Project Name...">
-            <input type="password" id="api-key" class="field" placeholder="Gemini API Key...">
-            <select id="model-list" class="field"><option value="">Connect Key to load models...</option></select>
-            <textarea id="prompt-input" class="field" style="height: 100px; resize: none;" placeholder="Command description..."></textarea>
+            <input type="text" id="proj-name" class="input-field" placeholder="Project Workspace Title...">
+            <input type="password" id="api-key" class="input-field" placeholder="Gemini API Key...">
+            <select id="model-select" class="input-field"><option value="">Connect Key to Sync...</option></select>
+            <textarea id="ai-prompt" class="input-field" style="height: 110px; resize: none;" placeholder="Detailed build instructions..."></textarea>
             
-            <button class="btn btn-main" onclick="runGeneration()"><i data-lucide="terminal"></i> SEND COMMAND</button>
+            <button class="btn btn-execute" onclick="fireAI()"><i data-lucide="send"></i> EXECUTE BUILD</button>
             
             <div class="btn-row">
-                <button class="btn btn-sec" onclick="syncAPI()"><i data-lucide="refresh-cw" style="width:14px;"></i> SYNC</button>
-                <button class="btn btn-sec" onclick="exportZIP()"><i data-lucide="download" style="width:14px;"></i> ZIP</button>
+                <button class="btn btn-sec" onclick="syncEngine()"><i data-lucide="refresh-cw"></i> SYNC</button>
+                <button class="btn btn-sec" onclick="exportBuild()"><i data-lucide="download"></i> ZIP</button>
             </div>
-            <button class="btn" style="background:#221111; color:#ff5555; border:1px solid #331111; font-size:10px;" onclick="clearHistory()">PURGE SESSION</button>
+            <button class="btn" style="background:#221111; color:#ff4444; border:1px solid #442222; font-size:9px;" onclick="clearSession()">RESET CONTEXT</button>
         </div>
     </aside>
 
     <main class="editor-space">
-        <div class="tabs">
-            <div class="tab active" id="t-html" onclick="setFile('html')">index.html</div>
-            <div class="tab" id="t-css" onclick="setFile('css')">style.css</div>
-            <div class="tab" id="t-js" onclick="setFile('js')">script.js</div>
-        </div>
-        <div class="cm-wrap"><textarea id="code-box"></textarea></div>
-        
-        <div class="preview-space" id="p-wrap">
-            <div class="float-bar">
-                <button class="tool-btn" onclick="render()">RE-RENDER</button>
-                <button class="tool-btn" onclick="toggleFS()">FULLSCREEN</button>
+        <div class="tab-bar">
+            <div class="tabs">
+                <div class="tab active" id="tab-html" onclick="switchFile('html')">INDEX.HTML</div>
+                <div class="tab" id="tab-css" onclick="switchFile('css')">STYLE.CSS</div>
+                <div class="tab" id="tab-js" onclick="switchFile('js')">SCRIPT.JS</div>
             </div>
-            <iframe id="output"></iframe>
+            <div style="font-size:9px; color:#222; margin-right:25px; font-weight:900;">DARKFOX_PROPRIETARY_V6</div>
+        </div>
+        
+        <div class="code-container"><textarea id="editor"></textarea></div>
+        
+        <div class="preview-pane" id="preview-wrap">
+            <div class="pane-controls">
+                <button class="p-btn" onclick="renderLive()">REFRESH</button>
+                <button class="p-btn" onclick="toggleMaximize()">MAXIMIZE</button>
+            </div>
+            <iframe id="live-frame"></iframe>
         </div>
     </main>
 </div>
 
 <script>
     lucide.createIcons();
-    let curFile = 'html', chatHistory = [];
-    let source = { 
-        html: '<!DOCTYPE html>\n<html>\n<body>\n  <h1>New Build</h1>\n</body>\n</html>', 
-        css: 'body { background: #000; color: #fff; text-align: center; }', 
-        js: '// Code here' 
+    let currentTab = 'html', chatHistory = [];
+    let projectFiles = { 
+        html: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>LuminaCode</title>\n</head>\n<body>\n  <h1>System Ready</h1>\n</body>\n</html>', 
+        css: 'body { background: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }', 
+        js: '// Logic layer' 
     };
 
-    const cm = CodeMirror.fromTextArea(document.getElementById('code-box'), {
-        theme: "dracula", lineNumbers: true, mode: "htmlmixed", lineWrapping: true
+    // Editor Engine Initialization
+    const codeEditor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+        theme: "dracula", lineNumbers: true, mode: "htmlmixed", lineWrapping: true, indentUnit: 4
     });
 
-    function toggleSide() { document.getElementById('sidebar').classList.toggle('hidden'); }
-    function toggleFS() { document.getElementById('p-wrap').classList.toggle('max'); }
-    function clearHistory() { chatHistory = []; document.getElementById('chat-view').innerHTML = '<div class="msg ai-msg"><b>LuminaCode AI:</b> Context cleared.</div>'; }
+    function toggleSide() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+    function toggleAcc() { 
+        const content = document.getElementById('id-content');
+        content.classList.toggle('hidden');
+        document.getElementById('id-icon').style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+    function toggleMaximize() { document.getElementById('preview-wrap').classList.toggle('maximized'); }
+    function clearSession() { chatHistory = []; document.getElementById('chat-flow').innerHTML = '<div class="msg ai-msg"><b>System:</b> Context purged. New session started.</div>'; }
 
-    // Tab Data Persistence
-    function setFile(type) {
-        source[curFile] = cm.getValue(); curFile = type;
+    // Multi-File Persistence Logic
+    function switchFile(type) {
+        projectFiles[currentTab] = codeEditor.getValue();
+        currentTab = type;
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(`t-${type}`).classList.add('active');
-        const map = { html: 'htmlmixed', css: 'css', js: 'javascript' };
-        cm.setOption('mode', map[type]);
-        cm.setValue(source[type]); cm.refresh();
+        document.getElementById(`tab-${type}`).classList.add('active');
+        
+        const modeMap = { html: 'htmlmixed', css: 'css', js: 'javascript' };
+        codeEditor.setOption('mode', modeMap[type]);
+        codeEditor.setValue(projectFiles[type]);
+        codeEditor.refresh();
     }
 
-    // Google Auth
-    function onAuth(resp) {
-        const u = JSON.parse(atob(resp.credential.split('.')[1]));
-        document.querySelector('.g_id_signin').style.display = 'none';
-        document.getElementById('user-profile').style.display = 'flex';
-        document.getElementById('u-name').innerText = u.name.toUpperCase();
-        document.getElementById('u-avatar').src = u.picture;
-        postMsg("System", `Authorized: **User** verified via Google.`);
+    // Auth & Identity Verification
+    function handleAuth(resp) {
+        const payload = JSON.parse(atob(resp.credential.split('.')[1]));
+        document.getElementById('u-name').innerText = payload.name.toUpperCase();
+        document.getElementById('u-avatar').src = payload.picture;
+        document.getElementById('u-avatar').classList.remove('hidden');
+        pushChat("System", "User identity authorized and synced.");
     }
 
-    async function syncAPI() {
+    // Engine Synchronization
+    async function syncEngine() {
         const key = document.getElementById('api-key').value;
-        localStorage.setItem('lumina_key_v6', key);
+        localStorage.setItem('lumina_boss_key_v6', key);
         try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-            const d = await r.json();
-            const s = document.getElementById('model-list'); s.innerHTML = '';
-            d.models.forEach(m => {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+            const data = await res.json();
+            const select = document.getElementById('model-select');
+            select.innerHTML = '';
+            data.models.forEach(m => {
                 if(m.supportedGenerationMethods.includes("generateContent")) {
-                    const o = document.createElement('option');
-                    o.value = m.name.split('/').pop(); o.innerText = o.value;
-                    if(o.value.includes('flash')) o.selected = true;
-                    s.appendChild(o);
+                    const opt = document.createElement('option');
+                    opt.value = m.name.split('/').pop(); opt.innerText = opt.value;
+                    if(opt.value.includes('flash')) opt.selected = true;
+                    select.appendChild(opt);
                 }
             });
-            postMsg("System", "Models Loaded. Connection Active.");
-        } catch(e) { postMsg("System", "Sync Error."); }
+            pushChat("System", "Models loaded. DarkFox Cloud Online.");
+        } catch(e) { pushChat("System", "Sync Error: Validate API Key."); }
     }
 
-    function postMsg(role, text) {
-        const w = document.getElementById('chat-view');
-        const d = document.createElement('div');
-        d.className = `msg ${role === 'User' ? 'user-msg' : 'ai-msg'}`;
-        d.innerHTML = `<b>${role}:</b> ${text}`;
-        w.appendChild(d); w.scrollTop = w.scrollHeight;
+    function pushChat(role, text) {
+        const wall = document.getElementById('chat-flow');
+        const div = document.createElement('div');
+        div.className = `msg ${role === 'User' ? 'user-msg' : 'ai-msg'}`;
+        div.innerHTML = `<b>${role}:</b> ${text}`;
+        wall.appendChild(div); wall.scrollTop = wall.scrollHeight;
     }
 
-    // Generation Core
-    async function runGeneration() {
-        const p = document.getElementById('prompt-input').value;
+    // Master AI Execution Loop
+    async function fireAI() {
+        const prompt = document.getElementById('ai-prompt').value;
         const key = document.getElementById('api-key').value;
-        const m = document.getElementById('model-list').value;
-        if(!p || !key) return;
+        const model = document.getElementById('model-select').value;
+        if(!prompt || !key) return;
 
-        postMsg("User", p);
-        document.getElementById('prompt-input').value = '';
-        chatHistory.push({ role: "user", parts: [{ text: p }] });
+        pushChat("User", prompt);
+        document.getElementById('ai-prompt').value = '';
+        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
         try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [
-                        { role: "user", parts: [{ text: "IDENTITY: LuminaCode AI. Environment: DarkFox Co. System. User: Tobias (Internal ID). Display: User. Format: [STORY] [HTML] [CSS] [JS]. Professional English." }]},
+                        { role: "user", parts: [{ text: "IDENTITY: LuminaCode Engine. Company: DarkFox Co. Crew Context: Denis (UI), Simon (Back), Liam (Sec). Boss: Tobias. Display Role: User. Format: [STORY] [HTML] [CSS] [JS]. Professional English." }]},
                         ...chatHistory.slice(-14)
                     ]
                 })
             });
-            const d = await r.json();
-            const raw = d.candidates[0].content.parts[0].text;
-            chatHistory.push({ role: "model", parts: [{ text: raw }] });
+            const data = await response.json();
+            const result = data.candidates[0].content.parts[0].text;
+            chatHistory.push({ role: "model", parts: [{ text: result }] });
 
-            const story = raw.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || raw;
-            source.html = raw.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || source.html;
-            source.css = raw.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || source.css;
-            source.js = raw.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || source.js;
+            const story = result.match(/\[STORY\](.*?)\[\/STORY\]/s)?.[1] || result;
+            projectFiles.html = result.match(/\[HTML\](.*?)\[\/HTML\]/s)?.[1] || projectFiles.html;
+            projectFiles.css = result.match(/\[CSS\](.*?)\[\/CSS\]/s)?.[1] || projectFiles.css;
+            projectFiles.js = result.match(/\[JS\](.*?)\[\/JS\]/s)?.[1] || projectFiles.js;
             
-            postMsg("LuminaCode AI", story.trim());
-            render();
-        } catch(e) { postMsg("System", "Execution Failed."); }
+            pushChat("LuminaCode", story.trim());
+            renderLive();
+        } catch(e) { pushChat("System", "Build Engine Error. Retrying..."); }
     }
 
-    function render() {
-        cm.setValue(source[curFile]);
-        const w = document.getElementById('output').contentWindow.document;
-        w.open(); w.write(`${source.html}<style>${source.css}</style><script>${source.js}<\/script>`); w.close();
+    function renderLive() {
+        codeEditor.setValue(projectFiles[currentTab]);
+        const frame = document.getElementById('live-frame').contentWindow.document;
+        frame.open();
+        frame.write(`${projectFiles.html}<style>${projectFiles.css}</style><script>${projectFiles.js}<\/script>`);
+        frame.close();
     }
 
-    function exportZIP() {
+    function exportBuild() {
         const zip = new JSZip();
-        zip.file("index.html", source.html); zip.file("style.css", source.css); zip.file("script.js", source.js);
+        zip.file("index.html", projectFiles.html);
+        zip.file("style.css", projectFiles.css);
+        zip.file("script.js", projectFiles.js);
         zip.generateAsync({type:"blob"}).then(b => {
             const a = document.createElement('a'); a.href = URL.createObjectURL(b);
-            a.download = `${document.getElementById('project-id').value || 'Build'}.zip`; a.click();
+            a.download = `${document.getElementById('proj-name').value || 'Build'}.zip`; a.click();
         });
     }
 
-    // Init & Auto-Save
-    document.getElementById('api-key').value = localStorage.getItem('lumina_key_v6') || '';
-    cm.setValue(source[curFile]);
-    cm.on('change', () => { 
-        source[curFile] = cm.getValue(); 
-        const w = document.getElementById('output').contentWindow.document;
-        w.open(); w.write(`${source.html}<style>${source.css}</style><script>${source.js}<\/script>`); w.close();
+    // Auto-Save & Runtime
+    document.getElementById('api-key').value = localStorage.getItem('lumina_boss_key_v6') || '';
+    codeEditor.setValue(projectFiles[currentTab]);
+    codeEditor.on('change', () => { 
+        projectFiles[currentTab] = codeEditor.getValue(); 
+        const frame = document.getElementById('live-frame').contentWindow.document;
+        frame.open(); frame.write(`${projectFiles.html}<style>${projectFiles.css}</style><script>${projectFiles.js}<\/script>`); frame.close();
     });
 </script>
 </body>
